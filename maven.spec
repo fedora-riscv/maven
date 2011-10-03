@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.0.3
-Release:        14%{?dist}
+Release:        14%{?dist}.1
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Tools
@@ -334,6 +334,9 @@ install -Dm 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/%{name}
 
 
 %changelog
+* Mon Oct 03 2011 Rex Dieter <rdieter@fedoraproject.org> - 3.0.3-14.1
+- rebuild (java), rel-eng#4932
+
 * Tue Aug 30 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 3.0.3-14
 - Fix test scope skipping
 
