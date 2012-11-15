@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.0.4
-Release:        21%{?dist}
+Release:        21.1%{?dist}
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Tools
@@ -380,11 +380,14 @@ ln -sf `rpm --eval '%%{_jnidir}'` %{_datadir}/%{name}/repository-jni/JPP
 %{_mandir}/man1/mvn.1.gz
 
 %files javadoc
-%doc LICENSE.txt
+%doc LICENSE.txt NOTICE.txt
 %{_javadocdir}/%{name}
 
 
 %changelog
+* Thu Nov 15 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.0.4-21.1
+- Install NOTICE file with javadoc package
+
 * Thu Nov 08 2012 Stanislav Ochotnicky <sochotnicky@redhat.com> - 3.0.4-21
 - Add support for custom jar/pom/fragment directories
 
