@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.0.3
-Release:        16%{?dist}
+Release:        16.1%{?dist}
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Tools
@@ -97,6 +97,12 @@ Obsoletes:      %{name} < 0:3.0.3-11
 
 # maven now provides "mvn" script and new maven2 mvn2
 Conflicts:      maven2 < 2.2.1-28
+
+# Fedora 18 and later have a separate maven-local package, which
+# functionality is provided by maven in Fedora 16.  This virtual
+# provide is to allow packagers to share the same spec file between
+# different versions of Fedora.
+Provides:       maven-local = %{version}-%{release}
 
 %description
 Maven is a software project management and comprehension tool. Based on the
@@ -335,6 +341,9 @@ install -Dm 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/%{name}
 
 
 %changelog
+* Tue Jan 22 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.0.3-16.1
+- Provide maven-local
+
 * Tue Dec 13 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 3.0.3-16
 - Add maven2-common-poms to Requires
 
