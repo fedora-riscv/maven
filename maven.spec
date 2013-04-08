@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.0.4
-Release:        21.2%{?dist}
+Release:        21.3%{?dist}
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Tools
@@ -101,6 +101,7 @@ Requires:       plexus-sec-dispatcher
 Requires:       plexus-utils
 Requires:       sisu >= 2.1.1-2
 Requires:       sonatype-oss-parent
+Requires:       tar
 Requires:       xbean
 Requires:       xerces-j2
 Requires:       yum-utils
@@ -385,6 +386,9 @@ ln -sf `rpm --eval '%%{_jnidir}'` %{_datadir}/%{name}/repository-jni/JPP
 
 
 %changelog
+* Mon Apr  8 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.0.4-21.3
+- Add missing R: tar
+
 * Mon Nov 19 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.0.4-21.2
 - Fix license tag
 
