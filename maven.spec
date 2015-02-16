@@ -1,6 +1,6 @@
 Name:           maven
 Version:        3.2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -18,6 +18,8 @@ Patch0002:      0002-Migrate-from-easymock-1-to-easymock-3.patch
 Patch0003:      0003-Update-Aether-to-0.9.0.M3.patch
 # Forwarded upstream (MNG-5534)
 Patch0004:      0004-Update-to-Sisu-0.1.0-and-Guice-3.1.6.patch
+# Patch for MNG-5663 backported from upstream commit 61c37404256
+Patch0005:      0005-Fixes-MNG-5663-a-regression-introduced-in-3.2.2-by-M.patch
 
 BuildArch:      noarch
 
@@ -149,6 +151,7 @@ Group:          Documentation
 %patch0002 -p1
 %patch0003 -p1
 %patch0004 -p1
+%patch0005 -p1
 
 # not really used during build, but a precaution
 rm maven-ant-tasks-*.jar
@@ -274,6 +277,10 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Mon Feb 16 2015 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.2.2-2
+- Add patch for MNG-5663
+- Resolves: rhbz#1193103
+
 * Wed Jun 18 2014 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.2.2-1
 - Update to upstream version 3.2.2
 

@@ -1,7 +1,7 @@
-From 3d875b067847d00519f960bf83469b85685a4ec5 Mon Sep 17 00:00:00 2001
+From 32974767afa24ede2ad8193cc08f19dfbadd4b73 Mon Sep 17 00:00:00 2001
 From: Mikolaj Izdebski <mizdebsk@redhat.com>
 Date: Thu, 29 Aug 2013 10:11:48 +0200
-Subject: [PATCH 2/4] Migrate from easymock 1 to easymock 3
+Subject: [PATCH 2/5] Migrate from easymock 1 to easymock 3
 
 ---
  maven-compat/pom.xml                               |  2 +-
@@ -142,5 +142,5 @@ index ccf6f36..760e6c2 100644
          <version>${easyMockVersion}</version>
          <scope>test</scope>
 -- 
-1.9.3
+2.1.0
 

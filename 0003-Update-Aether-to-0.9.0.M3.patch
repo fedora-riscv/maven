@@ -1,7 +1,7 @@
-From ff559645842bf21e3bfee6810ed2808657120396 Mon Sep 17 00:00:00 2001
+From 35e48f1584fcf17d65cc8aa27ba7db7ae8b05a3c Mon Sep 17 00:00:00 2001
 From: Mikolaj Izdebski <mizdebsk@redhat.com>
 Date: Mon, 12 Aug 2013 08:49:19 +0200
-Subject: [PATCH 3/4] Update Aether to 0.9.0.M3
+Subject: [PATCH 3/5] Update Aether to 0.9.0.M3
 
 ---
  apache-maven/pom.xml          | 6 +++++-
@@ -91,5 +91,5 @@ index 760e6c2..148b8ce 100644
        </dependency>
        <!--  Commons -->
 -- 
-1.9.3
+2.1.0
 

@@ -1,0 +1,222 @@
+From 73aed8e251693d9093f9940a45aa8f0671f44259 Mon Sep 17 00:00:00 2001
+From: markdingram <markdingram@gmail.com>
+Date: Fri, 18 Jul 2014 16:59:09 +0100
+Subject: [PATCH 5/5] Fixes MNG-5663 - a regression introduced in 3.2.2 by
+ MNG-5639 that prevents nested import POMs from resolving their dependencies.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The cuplrit was the resetRepositories method in tandem with the repository
+list instances being shared between ModelResolvers.
+
+- The copy constructor for the ModelResolvers now creates new lists.
+- The resetRepositories method has been removed. Instead there is a
+'replace' parameter on the addRepository method that allows the
+desired parameter replacement of MNG-5639 to take place.
+
+Signed-off-by: Jason van Zyl <jason@tesla.io>
+---
+ .../repository/internal/DefaultModelResolver.java  | 32 ++++++++++++++-----
+ .../apache/maven/project/ProjectModelResolver.java | 36 ++++++++++++++--------
+ .../maven/model/building/DefaultModelBuilder.java  |  9 ++----
+ .../maven/model/resolution/ModelResolver.java      | 14 +++++++--
+ 4 files changed, 61 insertions(+), 30 deletions(-)
+
+diff --git a/maven-aether-provider/src/main/java/org/apache/maven/repository/internal/DefaultModelResolver.java b/maven-aether-provider/src/main/java/org/apache/maven/repository/internal/DefaultModelResolver.java
+index 8335e01..859ab5a 100644
+--- a/maven-aether-provider/src/main/java/org/apache/maven/repository/internal/DefaultModelResolver.java
++++ b/maven-aether-provider/src/main/java/org/apache/maven/repository/internal/DefaultModelResolver.java
+@@ -26,6 +26,8 @@
+ import java.util.List;
+ import java.util.Set;
+ 
++import com.google.common.base.Predicate;
++import com.google.common.collect.Iterables;
+ import org.apache.maven.model.Parent;
+ import org.apache.maven.model.Repository;
+ import org.apache.maven.model.building.FileModelSource;
+@@ -102,7 +104,7 @@ private DefaultModelResolver( DefaultModelResolver original )
+         this.resolver = original.resolver;
+         this.versionRangeResolver = original.versionRangeResolver;
+         this.remoteRepositoryManager = original.remoteRepositoryManager;
+-        this.repositories = original.repositories;
++        this.repositories = new ArrayList<RemoteRepository>(original.repositories);
+         this.externalRepositories = original.externalRepositories;
+         this.repositoryIds = new HashSet<String>( original.repositoryIds );
+     }
+@@ -111,11 +113,24 @@ private DefaultModelResolver( DefaultModelResolver original )
+     public void addRepository( Repository repository )
+         throws InvalidRepositoryException
+     {
+-        if ( session.isIgnoreArtifactDescriptorRepositories() || !repositoryIds.add( repository.getId() ) )
++        addRepository( repository, false );
++    }
++
++    @Override
++    public void addRepository(final Repository repository, boolean replace) throws InvalidRepositoryException {
++        if ( session.isIgnoreArtifactDescriptorRepositories() )
+         {
+             return;
+         }
+ 
++        if ( !repositoryIds.add( repository.getId() ) ) {
++            if ( !replace ) {
++                return;
++            }
++
++            removeMatchingRepository( repositories, repository.getId() );
++        }
++
+         List<RemoteRepository> newRepositories =
+             Collections.singletonList( ArtifactDescriptorUtils.toRemoteRepository( repository ) );
+ 
+@@ -123,12 +138,13 @@ public void addRepository( Repository repository )
+             remoteRepositoryManager.aggregateRepositories( session, repositories, newRepositories, true );
+     }
+ 
+-    @Override
+-    public void resetRepositories()
+-    {
+-        this.repositoryIds.clear();
+-        this.repositories.clear();
+-        this.repositories.addAll( externalRepositories );
++    private static void removeMatchingRepository(Iterable<RemoteRepository> repositories, final String id) {
++        Iterables.removeIf(repositories, new Predicate<RemoteRepository>() {
++            @Override
++            public boolean apply(RemoteRepository remoteRepository) {
++                return remoteRepository.getId().equals(id);
++            }
++        });
+     }
+ 
+     @Override
+diff --git a/maven-core/src/main/java/org/apache/maven/project/ProjectModelResolver.java b/maven-core/src/main/java/org/apache/maven/project/ProjectModelResolver.java
+index eaa5792..c95dc4b 100644
+--- a/maven-core/src/main/java/org/apache/maven/project/ProjectModelResolver.java
++++ b/maven-core/src/main/java/org/apache/maven/project/ProjectModelResolver.java
+@@ -26,6 +26,8 @@
+ import java.util.List;
+ import java.util.Set;
+ 
++import com.google.common.base.Predicate;
++import com.google.common.collect.Iterables;
+ import org.apache.maven.model.Parent;
+ import org.apache.maven.model.Repository;
+ import org.apache.maven.model.building.FileModelSource;
+@@ -104,9 +106,9 @@ private ProjectModelResolver( ProjectModelResolver original )
+         this.trace = original.trace;
+         this.resolver = original.resolver;
+         this.remoteRepositoryManager = original.remoteRepositoryManager;
+-        this.pomRepositories = original.pomRepositories;
++        this.pomRepositories = new ArrayList<RemoteRepository>(original.pomRepositories);
+         this.externalRepositories = original.externalRepositories;
+-        this.repositories = original.repositories;
++        this.repositories = new ArrayList<RemoteRepository>(original.repositories);
+         this.repositoryMerging = original.repositoryMerging;
+         this.repositoryIds = new HashSet<String>( original.repositoryIds );
+         this.modelPool = original.modelPool;
+@@ -115,9 +117,19 @@ private ProjectModelResolver( ProjectModelResolver original )
+     public void addRepository( Repository repository )
+         throws InvalidRepositoryException
+     {
+-        if ( !repositoryIds.add( repository.getId() ) )
+-        {
+-            return;
++         addRepository( repository, false );
++    }
++
++    @Override
++    public void addRepository(final Repository repository, boolean replace) throws InvalidRepositoryException {
++        if ( !repositoryIds.add( repository.getId() ) ) {
++            if ( !replace ) {
++                return;
++            }
++
++            //Remove any previous repository with this Id
++            removeMatchingRepository(repositories, repository.getId());
++            removeMatchingRepository(pomRepositories, repository.getId());
+         }
+ 
+         List<RemoteRepository> newRepositories =
+@@ -136,13 +148,13 @@ public void addRepository( Repository repository )
+         }
+     }
+ 
+-    @Override
+-    public void resetRepositories()
+-    {
+-        this.repositoryIds.clear();
+-        this.pomRepositories.clear();
+-        this.repositories.clear();
+-        this.repositories.addAll(externalRepositories);
++    private static void removeMatchingRepository(Iterable<RemoteRepository> repositories, final String id) {
++        Iterables.removeIf(repositories, new Predicate<RemoteRepository>() {
++            @Override
++            public boolean apply(RemoteRepository remoteRepository) {
++                return remoteRepository.getId().equals(id);
++            }
++        });
+     }
+ 
+     public ModelResolver newCopy()
+diff --git a/maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelBuilder.java b/maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelBuilder.java
+index 52c9fc3..39e68e2 100644
+--- a/maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelBuilder.java
++++ b/maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelBuilder.java
+@@ -580,7 +580,7 @@ private void configureResolver( ModelResolver modelResolver, Model model, Defaul
+         configureResolver( modelResolver, model, problems, false );
+     }
+ 
+-    private void configureResolver( ModelResolver modelResolver, Model model, DefaultModelProblemCollector problems, boolean resetRepositories )
++    private void configureResolver( ModelResolver modelResolver, Model model, DefaultModelProblemCollector problems, boolean replaceRepositories )
+     {
+         if ( modelResolver == null )
+         {
+@@ -591,16 +591,11 @@ private void configureResolver( ModelResolver modelResolver, Model model, Defaul
+ 
+         List<Repository> repositories = model.getRepositories();
+ 
+-        if ( resetRepositories )
+-        {
+-            modelResolver.resetRepositories();
+-        }
+-
+         for ( Repository repository : repositories )
+         {
+             try
+             {
+-                modelResolver.addRepository( repository );
++                modelResolver.addRepository( repository, replaceRepositories );
+             }
+             catch ( InvalidRepositoryException e )
+             {
+diff --git a/maven-model-builder/src/main/java/org/apache/maven/model/resolution/ModelResolver.java b/maven-model-builder/src/main/java/org/apache/maven/model/resolution/ModelResolver.java
+index a71dd9a..c81a536 100644
+--- a/maven-model-builder/src/main/java/org/apache/maven/model/resolution/ModelResolver.java
++++ b/maven-model-builder/src/main/java/org/apache/maven/model/resolution/ModelResolver.java
+@@ -68,10 +68,18 @@ void addRepository( Repository repository )
+         throws InvalidRepositoryException;
+ 
+     /**
+-     * Resets repositories, has the effect of clearing any repositories previously added by the
+-     * {link #addRepository(Repository) method
++     * Adds a repository to use for subsequent resolution requests. The order in which repositories are added matters,
++     * repositories that were added first should also be searched first. When multiple repositories with the same
++     * identifier are added, then the value of the replace argument is determines the behaviour.
++     *
++     * If replace is false than any existing repository with the same Id will remain in use. If replace
++     * is true the new repository replaces the original.
++     *
++     * @param repository The repository to add to the internal search chain, must not be {@code null}.
++     * @throws InvalidRepositoryException If the repository could not be added (e.g. due to invalid URL or layout).
+      */
+-    void resetRepositories();
++    void addRepository( Repository repository, boolean replace )
++            throws InvalidRepositoryException;
+ 
+     /**
+      * Clones this resolver for usage in a forked resolution process. In general, implementors need not provide a deep
+-- 
+2.1.0
+
