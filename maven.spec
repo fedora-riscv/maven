@@ -1,6 +1,6 @@
 Name:           maven
 Version:        3.1.1
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Java project management and project comprehension tool
 
 Group:          Development/Tools
@@ -36,6 +36,8 @@ BuildRequires:  aether-util >= 1:0
 BuildRequires:  aether-transport-wagon >= 1:0
 BuildRequires:  aopalliance
 BuildRequires:  apache-commons-cli
+BuildRequires:  apache-commons-io
+BuildRequires:  apache-commons-lang
 BuildRequires:  apache-commons-codec
 BuildRequires:  apache-commons-jxpath
 BuildRequires:  apache-commons-logging
@@ -48,6 +50,7 @@ BuildRequires:  google-guice >= 3.0
 BuildRequires:  hamcrest
 BuildRequires:  httpcomponents-core
 BuildRequires:  httpcomponents-client
+BuildRequires:  jsoup
 BuildRequires:  jsr-305
 BuildRequires:  junit
 BuildRequires:  maven-assembly-plugin
@@ -95,6 +98,8 @@ Requires:       aether-transport-wagon
 Requires:       aether-util
 Requires:       aopalliance
 Requires:       apache-commons-cli
+Requires:       apache-commons-io
+Requires:       apache-commons-lang
 Requires:       apache-commons-codec
 Requires:       apache-commons-logging
 Requires:       atinject
@@ -103,6 +108,7 @@ Requires:       google-guice
 Requires:       guava
 Requires:       httpcomponents-client
 Requires:       httpcomponents-core
+Requires:       jsoup
 Requires:       jsr-305
 Requires:       maven-wagon
 Requires:       plexus-cipher
@@ -221,8 +227,11 @@ ln -sf $(build-classpath plexus/classworlds) \
         aopalliance \
         cdi-api \
         commons-cli \
+        commons-io \
+        commons-lang \
         guava \
         atinject \
+        jsoup \
         geronimo-annotation \
         jsr-305 \
         org.eclipse.sisu.inject \
@@ -265,6 +274,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Mon Mar 16 2015 Michal Srb <msrb@redhat.com> - 3.1.1-14
+- Add commons-io, commons-lang and jsoup to plexus.core (Resolves: rhbz#1202286)
+
 * Fri Nov  8 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.1.1-13
 - Add wagon-http-shared4 to plexus.core
 
