@@ -214,7 +214,10 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions
 install -d -m 755 %{buildroot}%{_mandir}/man1
 
-for cmd in mvn mvnDebug mvnyjp; do sed s/@@CMD@@/$cmd/ %{SOURCE200} >%{buildroot}%{_bindir}/$cmd; done
+for cmd in mvn mvnDebug mvnyjp; do
+    sed s/@@CMD@@/$cmd/ %{SOURCE200} >%{buildroot}%{_bindir}/$cmd
+    echo ".so man1/mvn.1" >%{buildroot}%{_mandir}/man1/$cmd.1
+done
 install -p -m 644 %{SOURCE2} %{buildroot}%{_mandir}/man1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/%{name}
 mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}
@@ -279,7 +282,7 @@ ln -sf $(build-classpath plexus/classworlds) \
 %config(noreplace) %{_sysconfdir}/%{name}/settings.xml
 %config(noreplace) %{_sysconfdir}/%{name}/logging/simplelogger.properties
 %{_datadir}/bash-completion/completions/%{name}
-%{_mandir}/man1/mvn.1.gz
+%{_mandir}/man1/mvn*.1.gz
 
 %files javadoc -f .mfiles-javadoc
 %doc LICENSE NOTICE
@@ -288,6 +291,7 @@ ln -sf $(build-classpath plexus/classworlds) \
 %changelog
 * Wed Apr  1 2015 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.2.2-4
 - Install mvnDebug and mvnyjp in bindir
+- Update manpage
 - Resolves: rhbz#1207850
 
 * Mon Mar 16 2015 Michal Srb <msrb@redhat.com> - 3.2.2-3
