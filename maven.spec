@@ -1,6 +1,6 @@
 Name:           maven
 Version:        3.2.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -214,7 +214,7 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions
 install -d -m 755 %{buildroot}%{_mandir}/man1
 
-install -p -m 755 %{SOURCE200} %{buildroot}%{_bindir}/mvn
+for cmd in mvn mvnDebug mvnyjp; do sed s/@@CMD@@/$cmd/ %{SOURCE200} >%{buildroot}%{_bindir}/$cmd; done
 install -p -m 644 %{SOURCE2} %{buildroot}%{_mandir}/man1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/%{name}
 mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}
@@ -271,7 +271,7 @@ ln -sf $(build-classpath plexus/classworlds) \
 %files -f .mfiles
 %doc LICENSE NOTICE README.md
 %{_datadir}/%{name}
-%{_bindir}/mvn
+%attr(0755,root,root) %{_bindir}/mvn*
 %dir %{_javadir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/logging
@@ -286,6 +286,10 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Wed Apr  1 2015 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.2.2-4
+- Install mvnDebug and mvnyjp in bindir
+- Resolves: rhbz#1207850
+
 * Mon Mar 16 2015 Michal Srb <msrb@redhat.com> - 3.2.2-3
 - Add commons-io, commons-lang and jsoup to plexus.core (Resolves: rhbz#1202286)
 
