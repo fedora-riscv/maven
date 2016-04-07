@@ -1,6 +1,6 @@
 Name:           maven
 Version:        3.3.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -10,6 +10,8 @@ Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/sour
 Source1:        maven-bash-completion
 Source2:        mvn.1
 Source200:      %{name}-script
+
+Patch0:         0001-Force-SLF4J-SimpleLogger-re-initialization.patch
 
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
@@ -137,6 +139,7 @@ Group:          Documentation
 
 %prep
 %setup -q -n apache-%{name}-%{version}%{?ver_add}
+%patch0 -p1
 
 # not really used during build, but a precaution
 rm maven-ant-tasks-*.jar
@@ -269,6 +272,10 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Thu Apr  7 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.3.9-4
+- Force SLF4J SimpleLogger re-initialization
+- Resolves: rhbz#1324832
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 3.3.9-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
