@@ -1,6 +1,6 @@
 Name:           maven
 Version:        3.3.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -43,6 +43,7 @@ BuildRequires:  jsr-305
 BuildRequires:  junit
 BuildRequires:  maven-assembly-plugin
 BuildRequires:  maven-compiler-plugin
+BuildRequires:  maven-enforcer-plugin
 BuildRequires:  maven-install-plugin
 BuildRequires:  maven-jar-plugin
 BuildRequires:  maven-javadoc-plugin
@@ -287,6 +288,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Fri Jul  1 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.3.9-6
+- Add missing BR on maven-enforcer-plugin
+
 * Tue Jun 28 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.3.9-5
 - Add maven-lib subpackage
 
