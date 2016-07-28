@@ -1,12 +1,15 @@
+%global ver_add -SNAPSHOT
+
 Name:           maven
-Version:        3.3.9
-Release:        6%{?dist}
+Version:        3.4.0
+Release:        0.1.20160716git32ce349%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
-Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
+#Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
+Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=32ce349;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 Source200:      %{name}-script
@@ -72,6 +75,9 @@ BuildRequires:  xmlunit
 BuildRequires:  mvn(ch.qos.logback:logback-classic)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
+BuildRequires:  gossip
+BuildRequires:  jansi
+BuildRequires:  maven-shared-utils
 
 Requires:       %{name}-lib = %{version}-%{release}
 
@@ -119,6 +125,9 @@ Requires:       plexus-utils
 Requires:       sisu-inject
 Requires:       sisu-plexus
 Requires:       slf4j
+Requires:       gossip
+Requires:       jansi
+Requires:       maven-shared-utils
 
 # Temporary fix for broken sisu
 Requires:       cdi-api
@@ -147,32 +156,23 @@ Group:          Documentation
 %{summary}.
 
 %prep
-%setup -q -n apache-%{name}-%{version}%{?ver_add}
+#setup -q -n apache-%{name}-%{version}%{?ver_add}
+%setup -q -n %{name}-32ce349
 %patch0 -p1
 
 # not really used during build, but a precaution
-rm maven-ant-tasks-*.jar
-
-# Use Eclipse Sisu plugin
-sed -i s/org.sonatype.plugins/org.eclipse.sisu/ maven-core/pom.xml
-
-# fix for animal-sniffer (we don't generate 1.5 signatures)
-sed -i 's:check-java-1.5-compat:check-java-1.6-compat:' pom.xml
+rm -f maven-ant-tasks-*.jar
 
 rm -f apache-maven/src/bin/*.bat
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
 # Update shell scripts to use unversioned classworlds
-sed -i -e s:'-classpath "${M2_HOME}"/boot/plexus-classworlds-\*.jar':'-classpath "${M2_HOME}"/boot/plexus-classworlds.jar':g \
+sed -i -e s:'"${MAVEN_HOME}"/boot/plexus-classworlds-\*.jar':'"${MAVEN_HOME}"/boot/plexus-classworlds.jar':g \
         apache-maven/src/bin/mvn*
 
 # Disable QA plugins which are not useful for us
 %pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :apache-rat-plugin
-
-# logback is not really needed by maven in typical use cases, so set
-# its scope to provided
-%pom_xpath_inject "pom:dependency[pom:artifactId='logback-classic']" "<scope>provided</scope>" maven-embedder
 
 %mvn_package :apache-maven __noinstall
 
@@ -240,7 +240,12 @@ ln -sf $(build-classpath plexus/classworlds) \
         commons-io \
         commons-lang \
         commons-lang3 \
+        gossip/gossip-bootstrap \
+        gossip/gossip-core \
+        gossip/gossip-slf4j \
         guava \
+        google-guice-no_aop \
+        jansi/jansi \
         atinject \
         jsoup/jsoup \
         jsr-305 \
@@ -251,9 +256,8 @@ ln -sf $(build-classpath plexus/classworlds) \
         plexus/interpolation \
         plexus/plexus-sec-dispatcher \
         plexus/utils \
-        google-guice-no_aop \
         slf4j/api \
-        slf4j/simple \
+        maven-shared-utils/maven-shared-utils \
         maven-wagon/file \
         maven-wagon/http-shaded \
         maven-wagon/http-shared \
@@ -288,6 +292,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Thu Jul 28 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.1.20160716git32ce349
+- Update to 3.4.0 snapshot
+
 * Fri Jul  1 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.3.9-6
 - Add missing BR on maven-enforcer-plugin
 
