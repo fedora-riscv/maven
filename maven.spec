@@ -2,14 +2,14 @@
 
 Name:           maven
 Version:        3.4.0
-Release:        0.1.20160716git32ce349%{?dist}
+Release:        0.1.20160807git9f2452a%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
 #Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
-Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=32ce349;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
+Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=9f2452a;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 Source200:      %{name}-script
@@ -157,7 +157,7 @@ Group:          Documentation
 
 %prep
 #setup -q -n apache-%{name}-%{version}%{?ver_add}
-%setup -q -n %{name}-32ce349
+%setup -q -n %{name}-9f2452a
 %patch0 -p1
 
 # not really used during build, but a precaution
@@ -292,7 +292,7 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
-* Thu Jul 28 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.1.20160716git32ce349
+* Mon Aug  8 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.1.20160807git9f2452a
 - Update to 3.4.0 snapshot
 
 * Fri Jul  1 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.3.9-6
