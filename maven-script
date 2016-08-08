@@ -1,20 +1,52 @@
 #!/bin/sh
 
-# Source system prefs
-if [ -f /etc/java/maven.conf ] ; then
-  . /etc/java/maven.conf
-fi
-
-# Source user prefs
-if [ -f $HOME/.mavenrc ] ; then
-  . $HOME/.mavenrc
-fi
+for f in /etc/mavenrc /etc/java/maven.conf "$HOME/.mavenrc"; do
+  [ -f "$f" ] && . "$f"
+done
 
 if [ -f /usr/share/java-utils/java-functions ] ; then
   . /usr/share/java-utils/java-functions
   set_jvm
   set_javacmd
 fi
+export JAVA_HOME
+export JAVACMD
 
 export M2_HOME="${M2_HOME:-/usr/share/maven}"
-export JAVA_HOME; $M2_HOME/bin/@@CMD@@ "$@"
+
+
+# traverses directory structure from process work directory to filesystem root
+# first directory with .mvn subdirectory is considered project base directory
+find_maven_basedir() {
+(
+  basedir="`pwd`"
+  wdir="`pwd`"
+  while [ "$wdir" != '/' ] ; do
+    if [ -d "$wdir"/.mvn ] ; then
+      basedir=$wdir
+      break
+    fi
+    wdir="`cd "$wdir/.."; pwd`"
+  done
+  echo "${basedir}"
+)
+}
+
+export MAVEN_PROJECTBASEDIR="${MAVEN_BASEDIR:-`find_maven_basedir`}"
+
+export MAVEN_CMD_LINE_ARGS="$MAVEN_CONFIG $@"
+
+project_opts=$(
+    [ -e "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config" ] &&
+	cat /tmp/foo "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config")
+
+exec "$JAVACMD" \
+    $project_opts \
+    $MAVEN_OPTS \
+    $MAVEN_DEBUG_OPTS \
+    -classpath $(build-classpath plexus-classworlds) \
+    -Dclassworlds.conf="${M2_HOME}/bin/m2.conf" \
+    -Dmaven.home="${M2_HOME}" \
+    -Dmaven.multiModuleProjectDirectory="${MAVEN_PROJECTBASEDIR}" \
+    org.codehaus.plexus.classworlds.launcher.Launcher \
+    "$@"
