@@ -140,7 +140,6 @@ reporting and documentation from a central piece of information.
 
 %package        lib
 Summary:        Core part of Maven
-Group:          Documentation
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
@@ -150,7 +149,6 @@ Core part of Apache Maven that can be used as a library.
 
 %package        javadoc
 Summary:        API documentation for %{name}
-Group:          Documentation
 
 %description    javadoc
 %{summary}.
