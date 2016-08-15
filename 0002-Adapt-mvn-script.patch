@@ -1,0 +1,79 @@
+From 207831a798420d86789fac965d7b935c4af281ca Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Mon, 15 Aug 2016 10:09:29 +0200
+Subject: [PATCH 2/2] Adapt mvn script
+
+---
+ apache-maven/src/bin/mvn | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/apache-maven/src/bin/mvn b/apache-maven/src/bin/mvn
+index 2a88df2..1160c62 100755
+--- a/apache-maven/src/bin/mvn
++++ b/apache-maven/src/bin/mvn
+@@ -22,7 +22,7 @@
+ #
+ # Environment Variable Prerequisites
+ #
+-#   JAVA_HOME       Must point at your Java Development Kit installation.
++#   JAVA_HOME       (Optional) Must point at your Java Development Kit installation.
+ #   MAVEN_OPTS      (Optional) Java runtime options used when Maven is executed.
+ #   MAVEN_SKIP_RC   (Optional) Flag to disable loading of mavenrc files.
+ # -----------------------------------------------------------------------------
+@@ -33,12 +33,24 @@ if [ -z "$MAVEN_SKIP_RC" ] ; then
+     . /etc/mavenrc
+   fi
+ 
++  if [ -f /etc/java/maven.conf ] ; then
++    . /etc/java/maven.conf
++  fi
++
+   if [ -f "$HOME/.mavenrc" ] ; then
+     . "$HOME/.mavenrc"
+   fi
+ 
+ fi
+ 
++if [ -f /usr/share/java-utils/java-functions ] ; then
++  . /usr/share/java-utils/java-functions
++  set_jvm
++  set_javacmd
++fi
++export JAVA_HOME
++export JAVACMD
++
+ # OS specific support. $var _must_ be set to either true or false.
+ cygwin=false;
+ mingw=false;
+@@ -63,7 +75,8 @@ done
+ 
+ saveddir=`pwd`
+ 
+-MAVEN_HOME=`dirname "$PRG"`/..
++MAVEN_HOME="${_FEDORA_MAVEN_HOME:-`dirname "$PRG"`/..}"
++unset _FEDORA_MAVEN_HOME
+ 
+ # make it fully qualified
+ MAVEN_HOME=`cd "$MAVEN_HOME" && pwd`
+@@ -91,7 +104,8 @@ fi
+ 
+ if [ -z "$JAVA_HOME" ] ; then
+   JAVACMD="`which java`"
+-else
++fi
++if [ -z "$JAVACMD" ] ; then
+   JAVACMD="$JAVA_HOME/bin/java"
+ fi
+ 
+@@ -103,7 +117,7 @@ if [ ! -x "$JAVACMD" ] ; then
+ fi
+ 
+ CLASSWORLDS_LAUNCHER=org.codehaus.plexus.classworlds.launcher.Launcher
+-CLASSWORLDS_JAR=`echo "${MAVEN_HOME}"/boot/plexus-classworlds-*.jar`
++CLASSWORLDS_JAR=`build-classpath plexus-classworlds`
+ 
+ # For Cygwin, switch paths to Windows format before running java
+ if $cygwin ; then
+-- 
+2.7.4
+

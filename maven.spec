@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.4.0
-Release:        0.1.20160807git9f2452a%{?dist}
+Release:        0.2.20160807git9f2452a%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -15,6 +15,7 @@ Source2:        mvn.1
 Source200:      %{name}-script
 
 Patch0:         0001-Force-SLF4J-SimpleLogger-re-initialization.patch
+Patch1:         0002-Adapt-mvn-script.patch
 
 BuildRequires:  maven-local
 
@@ -157,16 +158,13 @@ Summary:        API documentation for %{name}
 #setup -q -n apache-%{name}-%{version}%{?ver_add}
 %setup -q -n %{name}-9f2452a
 %patch0 -p1
+%patch1 -p1
 
 # not really used during build, but a precaution
 rm -f maven-ant-tasks-*.jar
 
 rm -f apache-maven/src/bin/*.bat
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
-
-# Update shell scripts to use unversioned classworlds
-sed -i -e s:'"${MAVEN_HOME}"/boot/plexus-classworlds-\*.jar':'"${MAVEN_HOME}"/boot/plexus-classworlds.jar':g \
-        apache-maven/src/bin/mvn*
 
 # Disable QA plugins which are not useful for us
 %pom_remove_plugin :animal-sniffer-maven-plugin
@@ -204,12 +202,11 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions
 install -d -m 755 %{buildroot}%{_mandir}/man1
 
-for cmd in mvnDebug mvnyjp; do
-    sed s/@@CMD@@/$cmd/ %{SOURCE200} >%{buildroot}%{_bindir}/$cmd
+for cmd in mvn mvnDebug mvnyjp; do
+    ln -s %{_datadir}/%{name}/bin/$cmd %{buildroot}%{_bindir}/$cmd
     echo ".so man1/mvn.1" >%{buildroot}%{_mandir}/man1/$cmd.1
 done
 sed s/@@CMD@@/mvn/ %{SOURCE200} >%{buildroot}%{_datadir}/%{name}/bin/mvn-script
-ln -sf %{_datadir}/%{name}/bin/mvn-script %{buildroot}%{_bindir}/mvn
 install -p -m 644 %{SOURCE2} %{buildroot}%{_mandir}/man1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn
 mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}
@@ -290,6 +287,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Mon Aug 15 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.2.20160807git9f2452a
+- Use patched upstream launcher instead of custom script
+
 * Mon Aug  8 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.1.20160807git9f2452a
 - Update to 3.4.0 snapshot
 
