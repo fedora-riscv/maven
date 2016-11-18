@@ -1,8 +1,9 @@
 %global ver_add -SNAPSHOT
+%global bundled_slf4j_version 1.7.21
 
 Name:           maven
 Version:        3.4.0
-Release:        0.3.20161118git8ae1a3e%{?dist}
+Release:        0.4.20161118git8ae1a3e%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -80,11 +81,12 @@ BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  gossip
 BuildRequires:  jansi
 BuildRequires:  maven-shared-utils
+
 BuildRequires:  groovy
 BuildRequires:  maven-plugin-exec
 BuildRequires:  maven-plugin-build-helper
 BuildRequires:  maven-dependency-plugin
-BuildRequires:  slf4j-sources
+BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
 Requires:       %{name}-lib = %{version}-%{release}
 
@@ -150,7 +152,12 @@ Summary:        Core part of Maven
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
-Provides:       bundled(slf4j)
+
+# Maven upstream uses patched version of SLF4J.  They unpack
+# slf4j-simple-sources.jar, apply non-upstreamable, Maven-specific
+# patch (using a script written in Groovy), compile and package as
+# maven-slf4j-provider.jar, together with Maven-specific additions.
+Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
 %description    lib
 Core part of Apache Maven that can be used as a library.
@@ -295,6 +302,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.4.20161118git8ae1a3e
+- Versioned bundled(slf4j) provides
+
 * Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.3.20161118git8ae1a3e
 - Update to latest upstream snapshot
 - Source-bundle slf4j-simple
