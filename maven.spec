@@ -2,7 +2,7 @@
 
 Name:           maven
 Version:        3.4.0
-Release:        0.3.20160807git8ae1a3e%{?dist}
+Release:        0.3.20161118git8ae1a3e%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -295,7 +295,7 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
-* Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.3.20160807git8ae1a3e
+* Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.3.20161118git8ae1a3e
 - Update to latest upstream snapshot
 - Source-bundle slf4j-simple
 
