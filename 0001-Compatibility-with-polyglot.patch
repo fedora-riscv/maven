@@ -1,0 +1,27 @@
+From ed8b817b3a4c6367a51c2c5dbb969d1defdc3aa5 Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Fri, 18 Nov 2016 18:56:25 +0100
+Subject: [PATCH] Compatibility with polyglot
+
+---
+ .../java/org/apache/maven/model/superpom/DefaultSuperPomProvider.java | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/maven-model-builder/src/main/java/org/apache/maven/model/superpom/DefaultSuperPomProvider.java b/maven-model-builder/src/main/java/org/apache/maven/model/superpom/DefaultSuperPomProvider.java
+index 0c720d1..76f733a 100644
+--- a/maven-model-builder/src/main/java/org/apache/maven/model/superpom/DefaultSuperPomProvider.java
++++ b/maven-model-builder/src/main/java/org/apache/maven/model/superpom/DefaultSuperPomProvider.java
+@@ -86,7 +86,9 @@ public Model getSuperModel( final String version )
+ 
+                 }
+ 
+-                superModel = modelProcessor.read( is, null );
++                Map<String, String> options = new HashMap<>();
++                options.put( "xml:4.0.0", "xml:4.0.0" );
++                superModel = modelProcessor.read( is, options );
+                 superPoms.put( effectiveVersion, superModel );
+             }
+ 
+-- 
+2.7.4
+

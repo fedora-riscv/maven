@@ -3,7 +3,7 @@
 
 Name:           maven
 Version:        3.4.0
-Release:        0.4.20161118git8ae1a3e%{?dist}
+Release:        0.5.20161118git8ae1a3e%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -18,6 +18,8 @@ Source200:      %{name}-script
 Patch0:         0001-Force-SLF4J-SimpleLogger-re-initialization.patch
 Patch1:         0002-Adapt-mvn-script.patch
 Patch2:         0001-Use-exec-maven-plugin-instead-of-groovy-maven-plugin.patch
+# TODO report upstream
+Patch3:         0001-Compatibility-with-polyglot.patch
 
 BuildRequires:  maven-local
 
@@ -174,6 +176,7 @@ Summary:        API documentation for %{name}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # not really used during build, but a precaution
 rm -f maven-ant-tasks-*.jar
@@ -302,6 +305,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Fri Nov 18 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.5.20161118git8ae1a3e
+- Restore compatibility with maven-polyglot
+
 * Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.4.20161118git8ae1a3e
 - Versioned bundled(slf4j) provides
 
