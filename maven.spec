@@ -2,20 +2,21 @@
 
 Name:           maven
 Version:        3.4.0
-Release:        0.2.20160807git9f2452a%{?dist}
+Release:        0.3.20160807git8ae1a3e%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
 #Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
-Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=9f2452a;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
+Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=8ae1a3e;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 Source200:      %{name}-script
 
 Patch0:         0001-Force-SLF4J-SimpleLogger-re-initialization.patch
 Patch1:         0002-Adapt-mvn-script.patch
+Patch2:         0001-Use-exec-maven-plugin-instead-of-groovy-maven-plugin.patch
 
 BuildRequires:  maven-local
 
@@ -79,6 +80,11 @@ BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  gossip
 BuildRequires:  jansi
 BuildRequires:  maven-shared-utils
+BuildRequires:  groovy
+BuildRequires:  maven-plugin-exec
+BuildRequires:  maven-plugin-build-helper
+BuildRequires:  maven-dependency-plugin
+BuildRequires:  slf4j-sources
 
 Requires:       %{name}-lib = %{version}-%{release}
 
@@ -144,6 +150,7 @@ Summary:        Core part of Maven
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
+Provides:       bundled(slf4j)
 
 %description    lib
 Core part of Apache Maven that can be used as a library.
@@ -156,9 +163,10 @@ Summary:        API documentation for %{name}
 
 %prep
 #setup -q -n apache-%{name}-%{version}%{?ver_add}
-%setup -q -n %{name}-9f2452a
+%setup -q -n %{name}-8ae1a3e
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # not really used during build, but a precaution
 rm -f maven-ant-tasks-*.jar
@@ -287,6 +295,10 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Fri Nov 18 2016 Mikolaj Izdebski <mizdebsk@redhat.com> - 3.4.0-0.3.20160807git8ae1a3e
+- Update to latest upstream snapshot
+- Source-bundle slf4j-simple
+
 * Mon Aug 15 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.2.20160807git9f2452a
 - Use patched upstream launcher instead of custom script
 
