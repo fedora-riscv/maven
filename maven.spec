@@ -1,9 +1,9 @@
 %global ver_add -SNAPSHOT
-%global bundled_slf4j_version 1.7.21
+%global bundled_slf4j_version 1.7.22
 
 Name:           maven
 Version:        3.4.0
-Release:        0.5.20161118git8ae1a3e%{?dist}
+Release:        0.6.20161118git8ae1a3e%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -305,6 +305,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Wed Dec 14 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.6.20161118git8ae1a3e
+- Bump slf4j version
+
 * Fri Nov 18 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.5.20161118git8ae1a3e
 - Restore compatibility with maven-polyglot
 
