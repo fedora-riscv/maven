@@ -1,25 +1,18 @@
-%global ver_add -SNAPSHOT
-%global bundled_slf4j_version 1.7.22
-
 Name:           maven
-Version:        3.4.0
-Release:        0.6.20161118git8ae1a3e%{?dist}
+Epoch:          1
+Version:        3.3.9
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
-#Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
-Source0:        https://git-wip-us.apache.org/repos/asf?p=maven.git;a=snapshot;h=8ae1a3e;sf=tgz#/apache-%{name}-%{version}-SNAPSHOT-src.tar.gz
+Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
-Source200:      %{name}-script
 
 Patch0:         0001-Force-SLF4J-SimpleLogger-re-initialization.patch
 Patch1:         0002-Adapt-mvn-script.patch
-Patch2:         0001-Use-exec-maven-plugin-instead-of-groovy-maven-plugin.patch
-# TODO report upstream
-Patch3:         0001-Compatibility-with-polyglot.patch
 
 BuildRequires:  maven-local
 
@@ -80,17 +73,8 @@ BuildRequires:  xmlunit
 BuildRequires:  mvn(ch.qos.logback:logback-classic)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
-BuildRequires:  gossip
-BuildRequires:  jansi
-BuildRequires:  maven-shared-utils
 
-BuildRequires:  groovy
-BuildRequires:  maven-plugin-exec
-BuildRequires:  maven-plugin-build-helper
-BuildRequires:  maven-dependency-plugin
-BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
-
-Requires:       %{name}-lib = %{version}-%{release}
+Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
@@ -136,9 +120,6 @@ Requires:       plexus-utils
 Requires:       sisu-inject
 Requires:       sisu-plexus
 Requires:       slf4j
-Requires:       gossip
-Requires:       jansi
-Requires:       maven-shared-utils
 
 # Temporary fix for broken sisu
 Requires:       cdi-api
@@ -155,12 +136,6 @@ Summary:        Core part of Maven
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
 
-# Maven upstream uses patched version of SLF4J.  They unpack
-# slf4j-simple-sources.jar, apply non-upstreamable, Maven-specific
-# patch (using a script written in Groovy), compile and package as
-# maven-slf4j-provider.jar, together with Maven-specific additions.
-Provides:       bundled(slf4j) = %{bundled_slf4j_version}
-
 %description    lib
 Core part of Apache Maven that can be used as a library.
 
@@ -171,17 +146,16 @@ Summary:        API documentation for %{name}
 %{summary}.
 
 %prep
-#setup -q -n apache-%{name}-%{version}%{?ver_add}
-%setup -q -n %{name}-8ae1a3e
+%setup -q -n apache-%{name}-%{version}
+
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 # not really used during build, but a precaution
-rm -f maven-ant-tasks-*.jar
+find -name '*.jar' -not -path '*/test/*' -delete
+find -name '*.class' -delete
+find -name '*.bat' -delete
 
-rm -f apache-maven/src/bin/*.bat
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
 # Disable QA plugins which are not useful for us
@@ -224,7 +198,6 @@ for cmd in mvn mvnDebug mvnyjp; do
     ln -s %{_datadir}/%{name}/bin/$cmd %{buildroot}%{_bindir}/$cmd
     echo ".so man1/mvn.1" >%{buildroot}%{_mandir}/man1/$cmd.1
 done
-sed s/@@CMD@@/mvn/ %{SOURCE200} >%{buildroot}%{_datadir}/%{name}/bin/mvn-script
 install -p -m 644 %{SOURCE2} %{buildroot}%{_mandir}/man1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn
 mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}
@@ -253,12 +226,8 @@ ln -sf $(build-classpath plexus/classworlds) \
         commons-io \
         commons-lang \
         commons-lang3 \
-        gossip/gossip-bootstrap \
-        gossip/gossip-core \
-        gossip/gossip-slf4j \
         guava \
         google-guice-no_aop \
-        jansi/jansi \
         atinject \
         jsoup/jsoup \
         jsr-305 \
@@ -270,7 +239,7 @@ ln -sf $(build-classpath plexus/classworlds) \
         plexus/plexus-sec-dispatcher \
         plexus/utils \
         slf4j/api \
-        maven-shared-utils/maven-shared-utils \
+        slf4j/simple \
         maven-wagon/file \
         maven-wagon/http-shaded \
         maven-wagon/http-shared \
@@ -287,7 +256,6 @@ ln -sf $(build-classpath plexus/classworlds) \
 %files lib -f .mfiles
 %doc LICENSE NOTICE README.md
 %{_datadir}/%{name}
-%attr(0755,root,root) %{_datadir}/%{name}/bin/mvn-script
 %dir %{_javadir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/logging
@@ -305,6 +273,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Wed Feb 01 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-1
+- Downgrade to 3.3.9
+
 * Wed Dec 14 2016 Michael Simacek <msimacek@redhat.com> - 3.4.0-0.6.20161118git8ae1a3e
 - Bump slf4j version
 

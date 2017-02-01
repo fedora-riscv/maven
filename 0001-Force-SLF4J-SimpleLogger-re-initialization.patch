@@ -1,4 +1,4 @@
-From d525c9b0b5d1bc61cff6c32164af71a449a074a9 Mon Sep 17 00:00:00 2001
+From 0ace877175e4fa35f1de3bf37edc1a05b6927d47 Mon Sep 17 00:00:00 2001
 From: Mikolaj Izdebski <mizdebsk@redhat.com>
 Date: Fri, 8 Apr 2016 01:05:29 +0200
 Subject: [PATCH 1/2] Force SLF4J SimpleLogger re-initialization
@@ -19,7 +19,7 @@ index bffd18c..5af6a68 100644
  /*
   * Licensed to the Apache Software Foundation (ASF) under one
   * or more contributor license agreements.  See the NOTICE file
-@@ -30,6 +32,19 @@
+@@ -30,6 +32,19 @@ public class MavenSlf4jSimpleFriend
  {
      public static void init()
      {
@@ -40,5 +40,5 @@ index bffd18c..5af6a68 100644
          ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
          if ( loggerFactory instanceof SimpleLoggerFactory )
 -- 
-2.7.4
+2.9.3
 
