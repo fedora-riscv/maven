@@ -1,7 +1,9 @@
+%bcond_without  logback
+
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -68,7 +70,9 @@ BuildRequires:  sisu-plexus >= 1:0.1
 BuildRequires:  sisu-mojos
 BuildRequires:  slf4j
 BuildRequires:  xmlunit
+%if %{with logback}
 BuildRequires:  mvn(ch.qos.logback:logback-classic)
+%endif
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 
@@ -164,6 +168,10 @@ sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
 %mvn_package :apache-maven __noinstall
 
+%if %{without logback}
+%pom_remove_dep -r :logback-classic
+rm maven-embedder/src/main/java/org/apache/maven/cli/logging/impl/LogbackConfiguration.java
+%endif
 
 %build
 # Put all JARs in standard location, but create symlinks in Maven lib
@@ -273,6 +281,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Thu Feb 02 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-3
+- Add conditional for logback
+
 * Thu Feb 02 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-2
 - Remove site-plugin and enforce-plugin from build
 
