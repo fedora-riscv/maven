@@ -1,7 +1,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -44,14 +44,12 @@ BuildRequires:  jsr-305
 BuildRequires:  junit
 BuildRequires:  maven-assembly-plugin
 BuildRequires:  maven-compiler-plugin
-BuildRequires:  maven-enforcer-plugin
 BuildRequires:  maven-install-plugin
 BuildRequires:  maven-jar-plugin
 BuildRequires:  maven-javadoc-plugin
 BuildRequires:  maven-parent
 BuildRequires:  maven-remote-resources-plugin
 BuildRequires:  maven-resources-plugin
-BuildRequires:  maven-site-plugin
 BuildRequires:  maven-surefire-plugin
 BuildRequires:  maven-wagon-file
 BuildRequires:  maven-wagon-http
@@ -158,9 +156,11 @@ find -name '*.bat' -delete
 
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
-# Disable QA plugins which are not useful for us
+# Disable plugins which are not useful for us
 %pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :apache-rat-plugin
+%pom_remove_plugin :maven-site-plugin
+%pom_remove_plugin :maven-enforcer-plugin
 
 %mvn_package :apache-maven __noinstall
 
@@ -273,6 +273,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Thu Feb 02 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-2
+- Remove site-plugin and enforce-plugin from build
+
 * Wed Feb 01 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-1
 - Downgrade to 3.3.9
 
