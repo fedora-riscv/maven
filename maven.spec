@@ -3,7 +3,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -34,7 +34,6 @@ BuildRequires:  apache-commons-jxpath
 BuildRequires:  apache-commons-logging
 BuildRequires:  apache-resource-bundles
 BuildRequires:  atinject
-BuildRequires:  buildnumber-maven-plugin
 BuildRequires:  cglib
 BuildRequires:  easymock3
 BuildRequires:  google-guice >= 3.1.6
@@ -165,7 +164,7 @@ sed -i 's:\r::' apache-maven/src/conf/settings.xml
 %pom_remove_plugin :apache-rat-plugin
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :maven-enforcer-plugin
-%pom_remove_plugin :buildnumber-maven-plugin
+%pom_remove_plugin -r :buildnumber-maven-plugin
 
 %mvn_package :apache-maven __noinstall
 
@@ -282,6 +281,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Mon Feb 06 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-5
+- Remove BR on buildnumber-plugin
+
 * Mon Feb 06 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-4
 - Remove buildnumber-plugin from build
 
