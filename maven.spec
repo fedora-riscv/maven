@@ -3,7 +3,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -47,7 +47,6 @@ BuildRequires:  maven-assembly-plugin
 BuildRequires:  maven-compiler-plugin
 BuildRequires:  maven-install-plugin
 BuildRequires:  maven-jar-plugin
-BuildRequires:  maven-javadoc-plugin
 BuildRequires:  maven-parent
 BuildRequires:  maven-remote-resources-plugin
 BuildRequires:  maven-resources-plugin
@@ -281,6 +280,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Tue Feb 14 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.3.9-6
+- Remove BR on maven-javadoc-plugin
+
 * Mon Feb 06 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-5
 - Remove BR on buildnumber-plugin
 
