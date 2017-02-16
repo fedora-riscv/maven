@@ -3,7 +3,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -78,7 +78,7 @@ Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
-Recommends:     java-devel
+%{?fedora:Recommends}%{!?fedora:Requires}: java-devel
 
 # XMvn does generate auto-requires, but explicit requires are still
 # needed because some symlinked JARs are not present in Maven POMs or
@@ -280,6 +280,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Thu Feb 16 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.3.9-7
+- Conditionalize weak dependencies
+
 * Tue Feb 14 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.3.9-6
 - Remove BR on maven-javadoc-plugin
 
