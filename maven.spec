@@ -3,7 +3,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -219,45 +219,45 @@ cp -a $M2_HOME/bin/* %{buildroot}%{_datadir}/%{name}/bin
 ln -sf $(build-classpath plexus/classworlds) \
     %{buildroot}%{_datadir}/%{name}/boot/plexus-classworlds.jar
 
-(cd %{buildroot}%{_datadir}/%{name}/lib
-    build-jar-repository -s -p . \
-        aether/aether-api \
-        aether/aether-connector-basic \
-        aether/aether-impl \
-        aether/aether-spi \
-        aether/aether-transport-wagon \
-        aether/aether-util \
-        aopalliance \
-        cdi-api \
-        commons-cli \
-        commons-io \
-        commons-lang \
-        commons-lang3 \
-        guava \
-        google-guice-no_aop \
-        atinject \
-        jsoup/jsoup \
-        jsr-305 \
-        org.eclipse.sisu.inject \
-        org.eclipse.sisu.plexus \
-        plexus/plexus-cipher \
-        plexus/containers-component-annotations \
-        plexus/interpolation \
-        plexus/plexus-sec-dispatcher \
-        plexus/utils \
-        slf4j/api \
-        slf4j/simple \
-        maven-wagon/file \
-        maven-wagon/http-shaded \
-        maven-wagon/http-shared \
-        maven-wagon/provider-api \
-        \
-        httpcomponents/httpclient \
-        httpcomponents/httpcore \
-        commons-logging \
-        commons-codec \
-        objectweb-asm/asm \
-)
+pushd %{buildroot}%{_datadir}/%{name}/lib
+build-jar-repository -s -p . \
+    aether/aether-api \
+    aether/aether-connector-basic \
+    aether/aether-impl \
+    aether/aether-spi \
+    aether/aether-transport-wagon \
+    aether/aether-util \
+    aopalliance \
+    cdi-api \
+    commons-cli \
+    commons-io \
+    commons-lang \
+    commons-lang3 \
+    guava \
+    google-guice-no_aop \
+    atinject \
+    jsoup/jsoup \
+    jsr-305 \
+    org.eclipse.sisu.inject \
+    org.eclipse.sisu.plexus \
+    plexus/plexus-cipher \
+    plexus/containers-component-annotations \
+    plexus/interpolation \
+    plexus/plexus-sec-dispatcher \
+    plexus/utils \
+    slf4j/api \
+    slf4j/simple \
+    maven-wagon/file \
+    maven-wagon/http-shaded \
+    maven-wagon/http-shared \
+    maven-wagon/provider-api \
+    \
+    httpcomponents/httpclient \
+    httpcomponents/httpcore \
+    commons-logging \
+    commons-codec \
+    objectweb-asm/asm
+popd
 
 
 %files lib -f .mfiles
@@ -280,6 +280,9 @@ ln -sf $(build-classpath plexus/classworlds) \
 
 
 %changelog
+* Wed Mar 01 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-8
+- Avoid subshell for build-jar-repository
+
 * Thu Feb 16 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.3.9-7
 - Conditionalize weak dependencies
 
