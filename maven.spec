@@ -3,7 +3,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.3.9
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -280,6 +280,9 @@ popd
 
 
 %changelog
+* Fri Mar  3 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.3.9-9
+- Fix bash-completion directory ownership
+
 * Wed Mar 01 2017 Michael Simacek <msimacek@redhat.com> - 1:3.3.9-8
 - Avoid subshell for build-jar-repository
 
