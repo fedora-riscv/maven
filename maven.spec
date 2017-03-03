@@ -272,7 +272,7 @@ popd
 
 %files
 %attr(0755,root,root) %{_bindir}/mvn*
-%{_datadir}/bash-completion/completions/mvn
+%{_datadir}/bash-completion
 %{_mandir}/man1/mvn*.1.gz
 
 %files javadoc -f .mfiles-javadoc
