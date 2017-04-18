@@ -1,0 +1,31 @@
+From 3dce15a3da21f5817a1b0193664312ffc8a5345c Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Tue, 18 Apr 2017 16:30:58 +0200
+Subject: [PATCH 2/3] Update to current slf4j
+
+---
+ .../src/main/java/org/slf4j/impl/MavenSimpleLogger.java            | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/maven-slf4j-provider/src/main/java/org/slf4j/impl/MavenSimpleLogger.java b/maven-slf4j-provider/src/main/java/org/slf4j/impl/MavenSimpleLogger.java
+index 17f1f48..c4acb92 100644
+--- a/maven-slf4j-provider/src/main/java/org/slf4j/impl/MavenSimpleLogger.java
++++ b/maven-slf4j-provider/src/main/java/org/slf4j/impl/MavenSimpleLogger.java
+@@ -56,8 +56,13 @@ public class MavenSimpleLogger
+     }
+ 
+     @Override
+-    protected void renderThrowable( Throwable t, PrintStream stream )
++    protected void writeThrowable( Throwable t, PrintStream stream )
+     {
++        if ( t == null )
++        {
++            return;
++        }
++
+         stream.print( buffer().failure( t.getClass().getName() ) );
+         if ( t.getMessage() != null )
+         {
+-- 
+2.9.3
+
