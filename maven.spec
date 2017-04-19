@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -172,6 +172,8 @@ sed -i 's:\r::' apache-maven/src/conf/settings.xml
 rm maven-embedder/src/main/java/org/apache/maven/cli/logging/impl/LogbackConfiguration.java
 %endif
 
+%mvn_alias :maven-resolver-provider :maven-aether-provider
+
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
 
@@ -236,6 +238,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Wed Apr 19 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.0-2
+- Add alias for maven-aether-provider
+
 * Tue Apr 11 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-1
 - Update to upstream version 3.5.0
 
