@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -199,7 +199,7 @@ xmvn-subst -R %{buildroot} -s %{buildroot}%{_datadir}/%{name}
 
 # Transitive deps of wagon-http, missing because of unshading
 build-jar-repository -s -p %{buildroot}%{_datadir}/%{name}/lib \
-    commons-logging httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
+    commons-{codec,logging} httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
 
 # Transitive deps of cdi-api that should have been excluded
 rm %{buildroot}%{_datadir}/%{name}/lib/jboss-interceptors*.jar
@@ -238,6 +238,10 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Wed Apr 26 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.0-3
+- Add apache-commons-codec to plexus.core
+- Resolves: rhbz#1445738
+
 * Wed Apr 19 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.0-2
 - Add alias for maven-aether-provider
 
