@@ -1,7 +1,7 @@
 From b54789188f2a61b5d58ff53986a5efe042d84fdf Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Tue, 18 Apr 2017 16:51:34 +0200
-Subject: [PATCH 3/3] Replace groovy invocation with antrun
+Subject: [PATCH 3/4] Replace groovy invocation with antrun
 
 ---
  maven-slf4j-provider/pom.xml | 23 ++++++++++++++---------
@@ -50,5 +50,5 @@ index 363e00d..9be251b 100644
 \ No newline at end of file
 +</project>
 -- 
-2.9.3
+2.9.4
 

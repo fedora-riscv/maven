@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -20,6 +20,9 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Update-to-current-slf4j.patch
 # Fedora specific, avoids usage of unpackaged groovy-maven-plugin
 Patch3:         0003-Replace-groovy-invocation-with-antrun.patch
+# Downstream-specific, avoids dependency on logback
+# Used only when %without logback is in effect
+Patch4:         0004-Invoke-logback-via-reflection.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.guava:guava)
@@ -169,7 +172,7 @@ sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
 %if %{without logback}
 %pom_remove_dep -r :logback-classic
-rm maven-embedder/src/main/java/org/apache/maven/cli/logging/impl/LogbackConfiguration.java
+%patch4 -p1
 %endif
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
@@ -238,6 +241,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Thu Jun 08 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-4
+- Update logback conditional to replace logback usage with reflection
+
 * Wed Apr 26 2017 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.0-3
 - Add apache-commons-codec to plexus.core
 - Resolves: rhbz#1445738

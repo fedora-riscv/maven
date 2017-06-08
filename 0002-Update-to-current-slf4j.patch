@@ -1,7 +1,7 @@
 From 3dce15a3da21f5817a1b0193664312ffc8a5345c Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Tue, 18 Apr 2017 16:30:58 +0200
-Subject: [PATCH 2/3] Update to current slf4j
+Subject: [PATCH 2/4] Update to current slf4j
 
 ---
  .../src/main/java/org/slf4j/impl/MavenSimpleLogger.java            | 7 ++++++-
@@ -27,5 +27,5 @@ index 17f1f48..c4acb92 100644
          if ( t.getMessage() != null )
          {
 -- 
-2.9.3
+2.9.4
 
