@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -241,6 +241,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Thu Jun 08 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-4
 - Update logback conditional to replace logback usage with reflection
 
