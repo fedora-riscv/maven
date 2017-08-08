@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -167,6 +167,13 @@ sed -i 's:\r::' apache-maven/src/conf/settings.xml
 %pom_remove_plugin -r :maven-site-plugin
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :buildnumber-maven-plugin
+sed -i "
+/buildNumber=/ {
+  s/=.*/=Red Hat %{version}-%{release}/
+  s/%{dist}$//
+}
+/timestamp=/ d
+" `find -name build.properties`
 
 %mvn_package :apache-maven __noinstall
 
@@ -241,6 +248,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Tue Aug 08 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-6
+- Generate build number based on package release number
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
