@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -161,6 +161,10 @@ find -name '*.bat' -delete
 
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
+# Downloads dependency licenses from the Internet and aggregates them.
+# We already ship the licenses in their respective packages.
+rm apache-maven/src/main/appended-resources/META-INF/LICENSE.vm
+
 # Disable plugins which are not useful for us
 %pom_remove_plugin -r :animal-sniffer-maven-plugin
 %pom_remove_plugin -r :apache-rat-plugin
@@ -248,6 +252,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Fri Sep 15 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-7
+- Fix FTBFS after maven-remote-reources-plugin update
+
 * Tue Aug 08 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-6
 - Generate build number based on package release number
 
