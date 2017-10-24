@@ -21,7 +21,7 @@ Patch2:         0002-Update-to-current-slf4j.patch
 # Fedora specific, avoids usage of unpackaged groovy-maven-plugin
 Patch3:         0003-Replace-groovy-invocation-with-antrun.patch
 # Downstream-specific, avoids dependency on logback
-# Used only when %without logback is in effect
+# Used only when %%without logback is in effect
 Patch4:         0004-Invoke-logback-via-reflection.patch
 
 BuildRequires:  maven-local
