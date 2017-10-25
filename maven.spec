@@ -4,8 +4,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.5.0
-Release:        7%{?dist}
+Version:        3.5.2
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -16,23 +16,20 @@ Source1:        maven-bash-completion
 Source2:        mvn.1
 
 Patch1:         0001-Adapt-mvn-script.patch
-# Part of https://github.com/apache/maven/pull/109
-Patch2:         0002-Update-to-current-slf4j.patch
-# Fedora specific, avoids usage of unpackaged groovy-maven-plugin
-Patch3:         0003-Replace-groovy-invocation-with-antrun.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
-Patch4:         0004-Invoke-logback-via-reflection.patch
+Patch2:         0002-Invoke-logback-via-reflection.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.guava:guava)
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
+BuildRequires:  mvn(javax.annotation:jsr250-api)
+BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-api)
@@ -52,19 +49,17 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-interpolation)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
+BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
 BuildRequires:  mvn(org.mockito:mockito-core)
+BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
-BuildRequires:  mvn(regexp:regexp)
 BuildRequires:  mvn(xmlunit:xmlunit)
-
-# Missed by builddep
-BuildRequires:  mvn(org.slf4j:jcl-over-slf4j:pom:)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
@@ -86,12 +81,13 @@ Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 # everything seems to be easier.
 Requires:       aopalliance
 Requires:       apache-commons-cli
+Requires:       apache-commons-codec
 Requires:       apache-commons-io
-Requires:       apache-commons-lang
 Requires:       apache-commons-lang3
 Requires:       apache-commons-logging
 Requires:       atinject
 Requires:       cdi-api
+Requires:       geronimo-annotation
 Requires:       google-guice
 Requires:       guava
 Requires:       hawtjni-runtime
@@ -151,8 +147,6 @@ Summary:        API documentation for %{name}
 %setup -q -n apache-%{name}-%{version}
 
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -183,7 +177,7 @@ sed -i "
 
 %if %{without logback}
 %pom_remove_dep -r :logback-classic
-%patch4 -p1
+%patch2 -p1
 %endif
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
@@ -252,6 +246,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Wed Oct 25 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.2-1
+- Update to upstream version 3.5.2
+
 * Fri Sep 15 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.0-7
 - Fix FTBFS after maven-remote-reources-plugin update
 

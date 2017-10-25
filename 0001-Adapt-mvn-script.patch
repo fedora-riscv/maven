@@ -1,14 +1,14 @@
-From 8ef7cdcdc1c40742fb091177afe17f771a518f90 Mon Sep 17 00:00:00 2001
+From 48cb2294352381ef90895a9dbeb57935fb01bcee Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Wed, 1 Feb 2017 14:54:26 +0100
-Subject: [PATCH 1/4] Adapt mvn script
+Subject: [PATCH 1/2] Adapt mvn script
 
 ---
  apache-maven/src/bin/mvn | 19 ++++++++++++++++---
  1 file changed, 16 insertions(+), 3 deletions(-)
 
 diff --git a/apache-maven/src/bin/mvn b/apache-maven/src/bin/mvn
-index 623b5f2..e486b34 100755
+index e3a5848..defaf5f 100755
 --- a/apache-maven/src/bin/mvn
 +++ b/apache-maven/src/bin/mvn
 @@ -22,7 +22,7 @@
@@ -65,5 +65,5 @@ index 623b5f2..e486b34 100755
  
  # For Cygwin, switch paths to Windows format before running java
 -- 
-2.9.4
+2.13.6
 
