@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -21,7 +21,7 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.google.guava:guava)
+BuildRequires:  mvn(com.google.guava:guava:20.0)
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
@@ -89,7 +89,7 @@ Requires:       atinject
 Requires:       cdi-api
 Requires:       geronimo-annotation
 Requires:       google-guice
-Requires:       guava
+Requires:       guava20
 Requires:       hawtjni-runtime
 Requires:       httpcomponents-client
 Requires:       httpcomponents-core
@@ -246,6 +246,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Mon Feb 05 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.2-2
+- Use guava20
+
 * Wed Oct 25 2017 Michael Simacek <msimacek@redhat.com> - 1:3.5.2-1
 - Update to upstream version 3.5.2
 
