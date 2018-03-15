@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -213,7 +213,7 @@ build-jar-repository -s -p %{buildroot}%{_datadir}/%{name}/lib \
 rm %{buildroot}%{_datadir}/%{name}/lib/jboss-interceptors*.jar
 rm %{buildroot}%{_datadir}/%{name}/lib/javax.el-api*.jar
 
-for cmd in mvn mvnDebug mvnyjp; do
+for cmd in mvn mvnDebug; do
     ln -s %{_datadir}/%{name}/bin/$cmd %{buildroot}%{_bindir}/$cmd
     echo ".so man1/mvn.1" >%{buildroot}%{_mandir}/man1/$cmd.1
 done
@@ -246,6 +246,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Thu Mar 15 2018 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.2-5
+- Don't install mvnyjp in bindir
+
 * Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1:3.5.2-4
 - Escape macros in %%changelog
 
