@@ -4,8 +4,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.5.2
-Release:        5%{?dist}
+Version:        3.5.3
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -19,6 +19,8 @@ Patch1:         0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
 Patch2:         0002-Invoke-logback-via-reflection.patch
+# We don't have mockito 2 yet
+Patch3:         0003-Revert-MNG-6335-Update-Mockito-to-2.12.0.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.guava:guava:20.0)
@@ -147,6 +149,7 @@ Summary:        API documentation for %{name}
 %setup -q -n apache-%{name}-%{version}
 
 %patch1 -p1
+%patch3 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -163,7 +166,6 @@ rm apache-maven/src/main/appended-resources/META-INF/LICENSE.vm
 %pom_remove_plugin -r :animal-sniffer-maven-plugin
 %pom_remove_plugin -r :apache-rat-plugin
 %pom_remove_plugin -r :maven-site-plugin
-%pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :buildnumber-maven-plugin
 sed -i "
 /buildNumber=/ {
@@ -246,6 +248,9 @@ ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
 
 
 %changelog
+* Thu Mar 15 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.3-1
+- Update to upstream version 3.5.3
+
 * Thu Mar 15 2018 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.2-5
 - Don't install mvnyjp in bindir
 
