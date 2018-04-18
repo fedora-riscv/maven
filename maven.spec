@@ -1,11 +1,13 @@
 %bcond_without  logback
 
 %global bundled_slf4j_version 1.7.25
+%global homedir %{_datadir}/%{name}%{?maven_version_suffix}
+%global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
 Name:           maven
 Epoch:          1
 Version:        3.5.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -70,6 +72,9 @@ BuildRequires:  mvn(ch.qos.logback:logback-classic)
 %endif
 
 Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
+
+Requires(post): chkconfig
+Requires(postun): chkconfig
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
@@ -198,56 +203,73 @@ mkdir m2home
 
 export M2_HOME=$(pwd)/m2home/apache-maven-%{version}%{?ver_add}
 
-install -d -m 755 %{buildroot}%{_datadir}/%{name}/conf
-install -d -m 755 %{buildroot}%{_bindir}
-install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
-install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions
-install -d -m 755 %{buildroot}%{_mandir}/man1
+install -d -m 755 %{buildroot}%{homedir}/conf
+install -d -m 755 %{buildroot}%{confdir}
+install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions/
 
-cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{_datadir}/%{name}/
-xmvn-subst -R %{buildroot} -s %{buildroot}%{_datadir}/%{name}
+cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
+xmvn-subst -R %{buildroot} -s %{buildroot}%{homedir}
 
 # Transitive deps of wagon-http, missing because of unshading
-build-jar-repository -s -p %{buildroot}%{_datadir}/%{name}/lib \
+build-jar-repository -s -p %{buildroot}%{homedir}/lib \
     commons-{codec,logging} httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
 
 # Transitive deps of cdi-api that should have been excluded
-rm %{buildroot}%{_datadir}/%{name}/lib/jboss-interceptors*.jar
-rm %{buildroot}%{_datadir}/%{name}/lib/javax.el-api*.jar
+rm %{buildroot}%{homedir}/lib/jboss-interceptors*.jar
+rm %{buildroot}%{homedir}/lib/javax.el-api*.jar
 
-for cmd in mvn mvnDebug; do
-    ln -s %{_datadir}/%{name}/bin/$cmd %{buildroot}%{_bindir}/$cmd
-    echo ".so man1/mvn.1" >%{buildroot}%{_mandir}/man1/$cmd.1
-done
-install -p -m 644 %{SOURCE2} %{buildroot}%{_mandir}/man1
-install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn
-mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}
-ln -sf %{_sysconfdir}/m2.conf %{buildroot}%{_datadir}/%{name}/bin/m2.conf
-mv $M2_HOME/conf/settings.xml %{buildroot}%{_sysconfdir}/%{name}
-ln -sf %{_sysconfdir}/%{name}/settings.xml %{buildroot}%{_datadir}/%{name}/conf/settings.xml
-mv $M2_HOME/conf/logging %{buildroot}%{_sysconfdir}/%{name}
-ln -sf %{_sysconfdir}/%{name}/logging %{buildroot}%{_datadir}/%{name}/conf
+install -p -m 644 %{SOURCE2} %{buildroot}%{homedir}/bin/
+gzip -9 %{buildroot}%{homedir}/bin/mvn.1
+install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn%{?maven_version_suffix}
+mv $M2_HOME/bin/m2.conf %{buildroot}%{_sysconfdir}/m2%{?maven_version_suffix}.conf
+ln -sf %{_sysconfdir}/m2%{?maven_version_suffix}.conf %{buildroot}%{homedir}/bin/m2.conf
+mv $M2_HOME/conf/settings.xml %{buildroot}%{confdir}/
+ln -sf %{confdir}/settings.xml %{buildroot}%{homedir}/conf/settings.xml
+mv $M2_HOME/conf/logging %{buildroot}%{confdir}/
+ln -sf %{confdir}/logging %{buildroot}%{homedir}/conf
+
+# Ghosts for alternatives
+install -d -m 755 %{buildroot}%{_bindir}/
+install -d -m 755 %{buildroot}%{_mandir}/man1/
+touch %{buildroot}%{_bindir}/{mvn,mvnDebug}
+touch %{buildroot}%{_mandir}/man1/{mvn,mvnDebug}.1
+
+
+%post
+update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alternatives_priority}0 \
+--slave %{_bindir}/mvnDebug mvnDebug %{homedir}/bin/mvnDebug \
+--slave %{_mandir}/man1/mvn.1.gz mvn1 %{homedir}/bin/mvn.1.gz \
+--slave %{_mandir}/man1/mvnDebug.1.gz mvnDebug1 %{homedir}/bin/mvn.1.gz \
+
+%postun
+[[ $1 -eq 0 ]] && update-alternatives --remove %{name} %{homedir}/bin/mvn
+
 
 %files lib -f .mfiles
-%doc LICENSE NOTICE README.md
-%{_datadir}/%{name}
-%dir %{_javadir}/%{name}
-%dir %{_sysconfdir}/%{name}
-%dir %{_sysconfdir}/%{name}/logging
-%config(noreplace) %{_sysconfdir}/m2.conf
-%config(noreplace) %{_sysconfdir}/%{name}/settings.xml
-%config(noreplace) %{_sysconfdir}/%{name}/logging/simplelogger.properties
+%doc README.md
+%license LICENSE NOTICE
+%{homedir}
+%dir %{confdir}
+%dir %{confdir}/logging
+%config(noreplace) %{_sysconfdir}/m2%{?maven_version_suffix}.conf
+%config(noreplace) %{confdir}/settings.xml
+%config(noreplace) %{confdir}/logging/simplelogger.properties
 
 %files
-%attr(0755,root,root) %{_bindir}/mvn*
+%ghost %{_bindir}/mvn
+%ghost %{_bindir}/mvnDebug
 %{_datadir}/bash-completion
-%{_mandir}/man1/mvn*.1.gz
+%ghost %{_mandir}/man1/mvn.1.gz
+%ghost %{_mandir}/man1/mvnDebug.1.gz
 
 %files javadoc -f .mfiles-javadoc
-%doc LICENSE NOTICE
+%license LICENSE NOTICE
 
 
 %changelog
+* Wed Apr 18 2018 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.3-2
+- Introduce alternatives
+
 * Thu Mar 15 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.3-1
 - Update to upstream version 3.5.3
 
