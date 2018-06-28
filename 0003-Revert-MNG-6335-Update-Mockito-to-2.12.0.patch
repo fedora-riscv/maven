@@ -1,15 +1,15 @@
-From 3ad510aeff9f75571006ec5c3453162f9cc047ff Mon Sep 17 00:00:00 2001
+From 6b5e263ebd03be9551c4e6aa394ac2334fff7c03 Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Tue, 13 Mar 2018 11:49:16 +0100
 Subject: [PATCH 3/3] Revert "[ MNG-6335] Update Mockito to 2.12.0"
 
 This reverts commit a03489b67d04a4b014ff5d1c151b331a39bf100b.
 ---
- .../toolchain/DefaultToolchainManagerPrivateTest.java     | 15 +++++++++------
- .../maven/toolchain/DefaultToolchainManagerTest.java      |  4 ++--
- .../toolchain/building/DefaultToolchainsBuilderTest.java  | 14 +++++++-------
- maven-embedder/pom.xml                                    |  1 -
- pom.xml                                                   |  2 +-
+ .../DefaultToolchainManagerPrivateTest.java       | 15 +++++++++------
+ .../toolchain/DefaultToolchainManagerTest.java    |  4 ++--
+ .../building/DefaultToolchainsBuilderTest.java    | 14 +++++++-------
+ maven-embedder/pom.xml                            |  1 -
+ pom.xml                                           |  2 +-
  5 files changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java b/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java
@@ -151,7 +151,7 @@ index fc530df..80fca09 100644
          try
          {
 diff --git a/maven-embedder/pom.xml b/maven-embedder/pom.xml
-index dd7e166..d2825c8 100644
+index 8a00565..2a9668b 100644
 --- a/maven-embedder/pom.xml
 +++ b/maven-embedder/pom.xml
 @@ -141,7 +141,6 @@ under the License.
@@ -163,7 +163,7 @@ index dd7e166..d2825c8 100644
      <dependency>
        <groupId>org.fusesource.jansi</groupId>
 diff --git a/pom.xml b/pom.xml
-index 7835415..8c13ddb 100644
+index ef1d0b0..77b3395 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -53,7 +53,7 @@ under the License.
@@ -176,5 +176,5 @@ index 7835415..8c13ddb 100644
      <plexusInterpolationVersion>1.24</plexusInterpolationVersion>
      <plexusUtilsVersion>3.1.0</plexusUtilsVersion>
 -- 
-2.14.3
+2.17.1
 

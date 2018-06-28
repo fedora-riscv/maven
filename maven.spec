@@ -6,8 +6,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.5.3
-Release:        2%{?dist}
+Version:        3.5.4
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 License:        ASL 2.0
 URL:            http://maven.apache.org/
@@ -267,6 +267,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Mon Jun 25 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-1
+- Update to upstream version 3.5.4
+
 * Wed Apr 18 2018 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.3-2
 - Introduce alternatives
 
