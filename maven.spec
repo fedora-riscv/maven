@@ -7,9 +7,11 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
-License:        ASL 2.0
+# maven itself is ASL 2.0
+# bundled slf4j is MIT
+License:        ASL 2.0 and MIT
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
@@ -267,6 +269,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Mon Jul 23 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-3
+- Fix license tag to include MIT for bundled slf4j
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
