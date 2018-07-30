@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -137,6 +137,9 @@ Summary:        Core part of Maven
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
 
+# Require full javapackages-tools since maven-script uses
+# /usr/share/java-utils/java-functions
+Requires:       javapackages-tools
 # Maven upstream uses patched version of SLF4J.  They unpack
 # slf4j-simple-sources.jar, apply non-upstreamable, Maven-specific
 # patch (using a script written in Groovy), compile and package as
@@ -272,6 +275,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Mon Jul 30 2018 Severin Gehwolf <sgehwolf@redhat.com> - 1:3.5.4-2
+- Require javapackages-tools for maven-lib.
+
 * Thu Jul 26 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-4
 - Symlink jansi-linux to lib
 
