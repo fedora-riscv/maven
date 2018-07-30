@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -220,6 +220,9 @@ build-jar-repository -s -p %{buildroot}%{homedir}/lib \
 rm %{buildroot}%{homedir}/lib/jboss-interceptors*.jar
 rm %{buildroot}%{homedir}/lib/javax.el-api*.jar
 
+# Native lib whose extraction we suppressed
+ln -s %{_jnidir}/jansi-native/jansi-linux.jar %{buildroot}%{homedir}/lib/
+
 install -p -m 644 %{SOURCE2} %{buildroot}%{homedir}/bin/
 gzip -9 %{buildroot}%{homedir}/bin/mvn.1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn%{?maven_version_suffix}
@@ -269,6 +272,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu Jul 26 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-4
+- Symlink jansi-linux to lib
+
 * Mon Jul 23 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-3
 - Fix license tag to include MIT for bundled slf4j
 
