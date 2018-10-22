@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -75,8 +75,8 @@ BuildRequires:  mvn(ch.qos.logback:logback-classic)
 
 Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
-Requires(post): chkconfig
-Requires(postun): chkconfig
+Requires(post): %{_sbindir}/update-alternatives
+Requires(postun): %{_sbindir}/update-alternatives
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
@@ -275,7 +275,10 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
-* Mon Jul 30 2018 Severin Gehwolf <sgehwolf@redhat.com> - 1:3.5.4-2
+* Mon Oct 22 2018 Peter Robinson <pbrobinson@fedoraproject.org> 1:3.5.4-6
+- Specify alternatives as dep, not chkconfig
+
+* Mon Jul 30 2018 Severin Gehwolf <sgehwolf@redhat.com> - 1:3.5.4-5
 - Require javapackages-tools for maven-lib.
 
 * Thu Jul 26 2018 Michael Simacek <msimacek@redhat.com> - 1:3.5.4-4
