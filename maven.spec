@@ -1,4 +1,3 @@
-%bcond_without  logback
 
 %global bundled_slf4j_version 1.7.25
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -69,9 +68,6 @@ BuildRequires:  mvn(xmlunit:xmlunit)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
-%if %{with logback}
-BuildRequires:  mvn(ch.qos.logback:logback-classic)
-%endif
 
 Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
@@ -187,10 +183,8 @@ sed -i "
 
 %mvn_package :apache-maven __noinstall
 
-%if %{without logback}
 %pom_remove_dep -r :logback-classic
 %patch2 -p1
-%endif
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
 
