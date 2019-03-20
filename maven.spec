@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -75,8 +75,8 @@ BuildRequires:  mvn(ch.qos.logback:logback-classic)
 
 Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
-Requires(post): chkconfig
-Requires(postun): chkconfig
+Requires(post): /usr/sbin/update-alternatives
+Requires(postun): /usr/sbin/update-alternatives
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
@@ -275,6 +275,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Wed Mar 20 2019 Peter Robinson <pbrobinson@fedoraproject.org> 1:3.5.4-9
+- Fix dependency on alternatives
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.4-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
