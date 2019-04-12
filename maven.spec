@@ -1,12 +1,12 @@
 
-%global bundled_slf4j_version 1.7.25
+%global bundled_slf4j_version 1.7.26
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -269,6 +269,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Fri Apr 12 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.4-6
+- Update SLF4J version to 1.7.26
+
 * Mon Jul 30 2018 Severin Gehwolf <sgehwolf@redhat.com> - 1:3.5.4-2
 - Require javapackages-tools for maven-lib.
 
