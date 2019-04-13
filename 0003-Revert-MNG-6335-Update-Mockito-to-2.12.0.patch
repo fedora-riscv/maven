@@ -1,7 +1,7 @@
-From 6b5e263ebd03be9551c4e6aa394ac2334fff7c03 Mon Sep 17 00:00:00 2001
+From e3b125fab7973d647288b9039fc897438b27c203 Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Tue, 13 Mar 2018 11:49:16 +0100
-Subject: [PATCH 3/3] Revert "[ MNG-6335] Update Mockito to 2.12.0"
+Subject: [PATCH 3/4] Revert "[ MNG-6335] Update Mockito to 2.12.0"
 
 This reverts commit a03489b67d04a4b014ff5d1c151b331a39bf100b.
 ---
@@ -9,14 +9,15 @@ This reverts commit a03489b67d04a4b014ff5d1c151b331a39bf100b.
  .../toolchain/DefaultToolchainManagerTest.java    |  4 ++--
  .../building/DefaultToolchainsBuilderTest.java    | 14 +++++++-------
  maven-embedder/pom.xml                            |  1 -
+ .../java/org/apache/maven/cli/MavenCliTest.java   |  6 +++---
  pom.xml                                           |  2 +-
- 5 files changed, 19 insertions(+), 17 deletions(-)
+ 6 files changed, 22 insertions(+), 20 deletions(-)
 
 diff --git a/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java b/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java
-index c937564..1e48441 100644
+index c93756463..1e4844154 100644
 --- a/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java
 +++ b/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerPrivateTest.java
-@@ -20,7 +20,8 @@ package org.apache.maven.toolchain;
+@@ -20,7 +20,8 @@
   */
  
  import static org.junit.Assert.assertEquals;
@@ -26,7 +27,7 @@ index c937564..1e48441 100644
  import static org.mockito.Mockito.mock;
  import static org.mockito.Mockito.never;
  import static org.mockito.Mockito.verify;
-@@ -144,8 +145,9 @@ public class DefaultToolchainManagerPrivateTest
+@@ -144,8 +145,9 @@ public void testToolchainsForConfiguredType()
          verify( logger, never() ).error( anyString() );
          assertEquals( 2, toolchains.length );
      }
@@ -38,7 +39,7 @@ index c937564..1e48441 100644
      public void testMisconfiguredToolchain()
          throws Exception
      {
-@@ -153,11 +155,12 @@ public class DefaultToolchainManagerPrivateTest
+@@ -153,11 +155,12 @@ public void testMisconfiguredToolchain()
          MavenSession session = mock( MavenSession.class );
          MavenExecutionRequest req = new DefaultMavenExecutionRequest();
          when( session.getRequest() ).thenReturn( req );
@@ -55,10 +56,10 @@ index c937564..1e48441 100644
      }
  }
 diff --git a/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerTest.java b/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerTest.java
-index 84444c0..6e85c42 100644
+index 84444c08e..6e85c4246 100644
 --- a/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerTest.java
 +++ b/maven-core/src/test/java/org/apache/maven/toolchain/DefaultToolchainManagerTest.java
-@@ -20,6 +20,7 @@ package org.apache.maven.toolchain;
+@@ -20,6 +20,7 @@
   */
  
  import static org.junit.Assert.assertEquals;
@@ -66,7 +67,7 @@ index 84444c0..6e85c42 100644
  import static org.mockito.Matchers.isA;
  import static org.mockito.Mockito.mock;
  import static org.mockito.Mockito.verify;
-@@ -38,7 +39,6 @@ import org.apache.maven.toolchain.model.ToolchainModel;
+@@ -38,7 +39,6 @@
  import org.codehaus.plexus.logging.Logger;
  import org.junit.Before;
  import org.junit.Test;
@@ -74,7 +75,7 @@ index 84444c0..6e85c42 100644
  import org.mockito.InjectMocks;
  import org.mockito.Mock;
  import org.mockito.MockitoAnnotations;
-@@ -142,7 +142,7 @@ public class DefaultToolchainManagerTest
+@@ -142,7 +142,7 @@ public void testRequirements()
          executionRequest.setToolchains( toolchainModels );
          when( session.getRequest() ).thenReturn( executionRequest );
          ToolchainPrivate basicPrivate = mock( ToolchainPrivate.class );
@@ -84,10 +85,10 @@ index 84444c0..6e85c42 100644
  
          List<Toolchain> toolchains =
 diff --git a/maven-core/src/test/java/org/apache/maven/toolchain/building/DefaultToolchainsBuilderTest.java b/maven-core/src/test/java/org/apache/maven/toolchain/building/DefaultToolchainsBuilderTest.java
-index fc530df..80fca09 100644
+index fc530df5a..80fca0942 100644
 --- a/maven-core/src/test/java/org/apache/maven/toolchain/building/DefaultToolchainsBuilderTest.java
 +++ b/maven-core/src/test/java/org/apache/maven/toolchain/building/DefaultToolchainsBuilderTest.java
-@@ -21,7 +21,8 @@ package org.apache.maven.toolchain.building;
+@@ -21,7 +21,8 @@
  
  import static org.junit.Assert.assertEquals;
  import static org.junit.Assert.assertNotNull;
@@ -97,7 +98,7 @@ index fc530df..80fca09 100644
  import static org.mockito.Mockito.when;
  
  import java.io.IOException;
-@@ -34,7 +35,6 @@ import org.apache.maven.toolchain.model.PersistedToolchains;
+@@ -34,7 +35,6 @@
  import org.apache.maven.toolchain.model.ToolchainModel;
  import org.junit.Before;
  import org.junit.Test;
@@ -105,7 +106,7 @@ index fc530df..80fca09 100644
  import org.mockito.InjectMocks;
  import org.mockito.Mock;
  import org.mockito.MockitoAnnotations;
-@@ -78,7 +78,7 @@ public class DefaultToolchainsBuilderTest
+@@ -78,7 +78,7 @@ public void testBuildRequestWithUserToolchains()
          toolchain.setType( "TYPE" );
          toolchain.addProvide( "key", "user_value" );
          userResult.addToolchain(  toolchain );
@@ -114,7 +115,7 @@ index fc530df..80fca09 100644
  
          ToolchainsBuildingResult result = toolchainBuilder.build( request );
          assertNotNull( result.getEffectiveToolchains() );
-@@ -101,7 +101,7 @@ public class DefaultToolchainsBuilderTest
+@@ -101,7 +101,7 @@ public void testBuildRequestWithGlobalToolchains()
          toolchain.setType( "TYPE" );
          toolchain.addProvide( "key", "global_value" );
          globalResult.addToolchain(  toolchain );
@@ -123,7 +124,7 @@ index fc530df..80fca09 100644
  
          ToolchainsBuildingResult result = toolchainBuilder.build( request );
          assertNotNull( result.getEffectiveToolchains() );
-@@ -131,7 +131,7 @@ public class DefaultToolchainsBuilderTest
+@@ -131,7 +131,7 @@ public void testBuildRequestWithBothToolchains()
          globalToolchain.setType( "TYPE" );
          globalToolchain.addProvide( "key", "global_value" );
          globalResult.addToolchain(  globalToolchain );
@@ -132,7 +133,7 @@ index fc530df..80fca09 100644
  
          ToolchainsBuildingResult result = toolchainBuilder.build( request );
          assertNotNull( result.getEffectiveToolchains() );
-@@ -150,7 +150,7 @@ public class DefaultToolchainsBuilderTest
+@@ -150,7 +150,7 @@ public void testStrictToolchainsParseException() throws Exception
          ToolchainsBuildingRequest request = new DefaultToolchainsBuildingRequest();
          request.setGlobalToolchainsSource( new StringSource( "" ) );
          ToolchainsParseException parseException = new ToolchainsParseException( "MESSAGE", 4, 2 );
@@ -141,7 +142,7 @@ index fc530df..80fca09 100644
          
          try
          {
-@@ -169,7 +169,7 @@ public class DefaultToolchainsBuilderTest
+@@ -169,7 +169,7 @@ public void testIOException() throws Exception
          ToolchainsBuildingRequest request = new DefaultToolchainsBuildingRequest();
          request.setGlobalToolchainsSource( new StringSource( "", "LOCATION" ) );
          IOException ioException = new IOException( "MESSAGE" );
@@ -151,10 +152,10 @@ index fc530df..80fca09 100644
          try
          {
 diff --git a/maven-embedder/pom.xml b/maven-embedder/pom.xml
-index 8a00565..2a9668b 100644
+index e32819196..3320d6c99 100644
 --- a/maven-embedder/pom.xml
 +++ b/maven-embedder/pom.xml
-@@ -141,7 +141,6 @@ under the License.
+@@ -137,7 +137,6 @@ under the License.
      <dependency>
        <groupId>org.mockito</groupId>
        <artifactId>mockito-core</artifactId>
@@ -162,19 +163,43 @@ index 8a00565..2a9668b 100644
      </dependency>
      <dependency>
        <groupId>org.fusesource.jansi</groupId>
+diff --git a/maven-embedder/src/test/java/org/apache/maven/cli/MavenCliTest.java b/maven-embedder/src/test/java/org/apache/maven/cli/MavenCliTest.java
+index 5f4c5b69a..88810d936 100644
+--- a/maven-embedder/src/test/java/org/apache/maven/cli/MavenCliTest.java
++++ b/maven-embedder/src/test/java/org/apache/maven/cli/MavenCliTest.java
+@@ -24,7 +24,7 @@
+ import static org.junit.Assert.assertTrue;
+ import static org.junit.Assert.fail;
+ import static org.junit.Assume.assumeTrue;
+-import static org.mockito.Mockito.any;
++import static org.mockito.Mockito.isA;
+ import static org.mockito.Mockito.inOrder;
+ import static org.mockito.Mockito.mock;
+ import static org.mockito.Mockito.times;
+@@ -327,8 +327,8 @@ protected void customizeContainer(PlexusContainer container) {
+         customizedMavenCli.toolchains(cliRequest);
+ 
+         InOrder orderdEventSpyDispatcherMock = inOrder(eventSpyDispatcherMock);
+-        orderdEventSpyDispatcherMock.verify(eventSpyDispatcherMock, times(1)).onEvent(any(ToolchainsBuildingRequest.class));
+-        orderdEventSpyDispatcherMock.verify(eventSpyDispatcherMock, times(1)).onEvent(any(ToolchainsBuildingResult.class));
++        orderdEventSpyDispatcherMock.verify(eventSpyDispatcherMock, times(1)).onEvent(isA(ToolchainsBuildingRequest.class));
++        orderdEventSpyDispatcherMock.verify(eventSpyDispatcherMock, times(1)).onEvent(isA(ToolchainsBuildingResult.class));
+     }
+ 
+ }
 diff --git a/pom.xml b/pom.xml
-index ef1d0b0..77b3395 100644
+index 237cdc39e..84fc037bc 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -53,7 +53,7 @@ under the License.
      <commonsCliVersion>1.4</commonsCliVersion>
-     <commonsLangVersion>3.5</commonsLangVersion>
+     <commonsLangVersion>3.8.1</commonsLangVersion>
      <junitVersion>4.12</junitVersion>
--    <mockitoVersion>2.12.0</mockitoVersion>
+-    <mockitoVersion>2.21.0</mockitoVersion>
 +    <mockitoVersion>1.10.19</mockitoVersion>
      <plexusVersion>1.7.1</plexusVersion>
-     <plexusInterpolationVersion>1.24</plexusInterpolationVersion>
-     <plexusUtilsVersion>3.1.0</plexusUtilsVersion>
+     <plexusInterpolationVersion>1.25</plexusInterpolationVersion>
+     <plexusUtilsVersion>3.2.0</plexusUtilsVersion>
 -- 
-2.17.1
+2.20.1
 

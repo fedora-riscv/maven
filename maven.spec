@@ -1,12 +1,11 @@
-
 %global bundled_slf4j_version 1.7.26
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
 Name:           maven
 Epoch:          1
-Version:        3.5.4
-Release:        6%{?dist}
+Version:        3.6.1
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -14,7 +13,7 @@ License:        ASL 2.0 and MIT
 URL:            http://maven.apache.org/
 BuildArch:      noarch
 
-Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
+Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/sources/apache-%{name}-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 
@@ -24,9 +23,10 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 # We don't have mockito 2 yet
 Patch3:         0003-Revert-MNG-6335-Update-Mockito-to-2.12.0.patch
+# We don't have xmlunit 2 yet
+Patch4:         0004-Revert-MNG-6479-Upgrade-XMLUnit-to-2.2.1-183.patch
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.google.guava:guava:20.0)
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
@@ -47,24 +47,24 @@ BuildRequires:  mvn(org.apache.maven.shared:maven-shared-utils)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-file)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-http::shaded:)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
-BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
+BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.10.0
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-interpolation)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
-BuildRequires:  mvn(org.mockito:mockito-core)
+BuildRequires:  mvn(org.mockito:mockito-core) < 2
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
-BuildRequires:  mvn(xmlunit:xmlunit)
+BuildRequires:  mvn(xmlunit:xmlunit) < 2
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
@@ -94,7 +94,7 @@ Requires:       atinject
 Requires:       cdi-api
 Requires:       geronimo-annotation
 Requires:       google-guice
-Requires:       guava20
+Requires:       guava
 Requires:       hawtjni-runtime
 Requires:       httpcomponents-client
 Requires:       httpcomponents-core
@@ -155,7 +155,9 @@ Summary:        API documentation for %{name}
 %setup -q -n apache-%{name}-%{version}
 
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -184,7 +186,6 @@ sed -i "
 %mvn_package :apache-maven __noinstall
 
 %pom_remove_dep -r :logback-classic
-%patch2 -p1
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
 
@@ -269,6 +270,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Sat Apr 13 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-1
+- Update to upstream version 3.6.1
+
 * Fri Apr 12 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.4-6
 - Update SLF4J version to 1.7.26
 
