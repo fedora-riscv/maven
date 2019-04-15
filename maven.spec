@@ -62,7 +62,8 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
-BuildRequires:  mvn(xmlunit:xmlunit) >= 2
+BuildRequires:  mvn(org.xmlunit:xmlunit-core)
+BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
