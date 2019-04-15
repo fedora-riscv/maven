@@ -23,8 +23,6 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 # We don't have mockito 2 yet
 Patch3:         0003-Revert-MNG-6335-Update-Mockito-to-2.12.0.patch
-# We don't have xmlunit 2 yet
-Patch4:         0004-Revert-MNG-6479-Upgrade-XMLUnit-to-2.2.1-183.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -64,7 +62,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
-BuildRequires:  mvn(xmlunit:xmlunit) < 2
+BuildRequires:  mvn(xmlunit:xmlunit) >= 2
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
@@ -157,7 +155,6 @@ Summary:        API documentation for %{name}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
