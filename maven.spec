@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -21,8 +21,6 @@ Patch1:         0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
 Patch2:         0002-Invoke-logback-via-reflection.patch
-# We don't have mockito 2 yet
-Patch3:         0003-Revert-MNG-6335-Update-Mockito-to-2.12.0.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -56,7 +54,7 @@ BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
-BuildRequires:  mvn(org.mockito:mockito-core) < 2
+BuildRequires:  mvn(org.mockito:mockito-core) >= 2
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
@@ -155,7 +153,6 @@ Summary:        API documentation for %{name}
 
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -268,6 +265,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Wed Apr 17 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-2
+- Update to Mockito 2
+
 * Sat Apr 13 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-1
 - Update to upstream version 3.6.1
 
