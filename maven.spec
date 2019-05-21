@@ -73,7 +73,7 @@ Requires(postun): chkconfig
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
-%{?fedora:Recommends}%{!?fedora:Requires}: java-devel
+Recommends: java-devel
 
 # XMvn does generate auto-requires, but explicit requires are still
 # needed because some symlinked JARs are not present in Maven POMs or
