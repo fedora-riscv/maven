@@ -68,8 +68,8 @@ BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
 Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
 
-Requires(post): chkconfig
-Requires(postun): chkconfig
+Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
+Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
