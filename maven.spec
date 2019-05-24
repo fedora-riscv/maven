@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -265,6 +265,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Fri May 24 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-3
+- Mass rebuild for javapackages-tools 201901
+
 * Wed Apr 17 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-2
 - Update to Mockito 2
 
