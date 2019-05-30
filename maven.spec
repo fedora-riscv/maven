@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -21,6 +21,7 @@ Patch1:         0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
 Patch2:         0002-Invoke-logback-via-reflection.patch
+Patch3:         0003-MNG-6642-Revert-MNG-5995-Remove-dependency-to-maven-.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -153,6 +154,7 @@ Summary:        API documentation for %{name}
 
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -265,6 +267,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu May 30 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-4
+- Backport upstream fix for Tycho P2 integarion
+
 * Fri May 24 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-3
 - Mass rebuild for javapackages-tools 201901
 
