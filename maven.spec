@@ -99,12 +99,7 @@ Requires:       httpcomponents-core
 Requires:       jansi
 Requires:       jansi-native
 Requires:       jcl-over-slf4j
-Requires:       maven-resolver-api
-Requires:       maven-resolver-connector-basic
-Requires:       maven-resolver-impl
-Requires:       maven-resolver-spi
-Requires:       maven-resolver-transport-wagon
-Requires:       maven-resolver-util
+Requires:       maven-resolver
 Requires:       maven-shared-utils
 Requires:       maven-wagon
 Requires:       plexus-cipher
