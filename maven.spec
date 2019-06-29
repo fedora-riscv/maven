@@ -106,18 +106,14 @@ Requires:       maven-resolver-spi
 Requires:       maven-resolver-transport-wagon
 Requires:       maven-resolver-util
 Requires:       maven-shared-utils
-Requires:       maven-wagon-file
-Requires:       maven-wagon-http
-Requires:       maven-wagon-http-shared
-Requires:       maven-wagon-provider-api
+Requires:       maven-wagon
 Requires:       plexus-cipher
 Requires:       plexus-classworlds
 Requires:       plexus-containers-component-annotations
 Requires:       plexus-interpolation
 Requires:       plexus-sec-dispatcher
 Requires:       plexus-utils
-Requires:       sisu-inject
-Requires:       sisu-plexus
+Requires:       sisu
 Requires:       slf4j
 
 %description
