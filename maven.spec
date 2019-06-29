@@ -116,7 +116,7 @@ Maven is a software project management and comprehension tool. Based on the
 concept of a project object model (POM), Maven can manage a project's build,
 reporting and documentation from a central piece of information.
 
-%package        lib
+%package -n %{?module_prefix}%{name}-lib
 Summary:        Core part of Maven
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
@@ -131,9 +131,10 @@ Requires:       javapackages-tools
 # maven-slf4j-provider.jar, together with Maven-specific additions.
 Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
-%description    lib
+%description -n %{?module_prefix}%{name}-lib
 Core part of Apache Maven that can be used as a library.
 
+%{?module_package}
 %{?javadoc_package}
 
 %prep
@@ -222,17 +223,17 @@ touch %{buildroot}%{_bindir}/{mvn,mvnDebug}
 touch %{buildroot}%{_mandir}/man1/{mvn,mvnDebug}.1
 
 
-%post
+%post -n %{?module_prefix}%{name}
 update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alternatives_priority}0 \
 --slave %{_bindir}/mvnDebug mvnDebug %{homedir}/bin/mvnDebug \
 --slave %{_mandir}/man1/mvn.1.gz mvn1 %{homedir}/bin/mvn.1.gz \
 --slave %{_mandir}/man1/mvnDebug.1.gz mvnDebug1 %{homedir}/bin/mvn.1.gz \
 
-%postun
+%postun -n %{?module_prefix}%{name}
 [[ $1 -eq 0 ]] && update-alternatives --remove %{name} %{homedir}/bin/mvn
 
 
-%files lib -f .mfiles
+%files -n %{?module_prefix}%{name}-lib -f .mfiles
 %doc README.md
 %license LICENSE NOTICE
 %{homedir}
@@ -242,7 +243,7 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config(noreplace) %{confdir}/settings.xml
 %config(noreplace) %{confdir}/logging/simplelogger.properties
 
-%files
+%files -n %{?module_prefix}%{name}
 %ghost %{_bindir}/mvn
 %ghost %{_bindir}/mvnDebug
 %{_datadir}/bash-completion
