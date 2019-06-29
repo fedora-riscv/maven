@@ -66,6 +66,34 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
+BuildRequires:  %{?module_prefix}aopalliance
+BuildRequires:  %{?module_prefix}apache-commons-cli
+BuildRequires:  %{?module_prefix}apache-commons-codec
+BuildRequires:  %{?module_prefix}apache-commons-io
+BuildRequires:  %{?module_prefix}apache-commons-lang3
+BuildRequires:  %{?module_prefix}apache-commons-logging
+BuildRequires:  %{?module_prefix}atinject
+BuildRequires:  %{?module_prefix}cdi-api
+BuildRequires:  %{?module_prefix}geronimo-annotation
+BuildRequires:  %{?module_prefix}google-guice
+BuildRequires:  %{?module_prefix}guava
+BuildRequires:  %{?module_prefix}hawtjni-runtime
+BuildRequires:  %{?module_prefix}httpcomponents-client
+BuildRequires:  %{?module_prefix}httpcomponents-core
+BuildRequires:  %{?module_prefix}jansi
+BuildRequires:  %{?module_prefix}jansi-native
+BuildRequires:  %{?module_prefix}jcl-over-slf4j
+BuildRequires:  %{?module_prefix}maven-resolver
+BuildRequires:  %{?module_prefix}maven-shared-utils
+BuildRequires:  %{?module_prefix}maven-wagon
+BuildRequires:  %{?module_prefix}plexus-cipher
+BuildRequires:  %{?module_prefix}plexus-classworlds
+BuildRequires:  %{?module_prefix}plexus-containers-component-annotations
+BuildRequires:  %{?module_prefix}plexus-interpolation
+BuildRequires:  %{?module_prefix}plexus-sec-dispatcher
+BuildRequires:  %{?module_prefix}plexus-utils
+BuildRequires:  %{?module_prefix}sisu
+BuildRequires:  %{?module_prefix}slf4j
 
 Requires:       %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 
