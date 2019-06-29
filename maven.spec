@@ -24,50 +24,50 @@ Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-MNG-6642-Revert-MNG-5995-Remove-dependency-to-maven-.patch
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.google.inject:guice::no_aop:)
-BuildRequires:  mvn(commons-cli:commons-cli)
+BuildRequires:  %{?module_prefix}mvn(com.google.inject:guice::no_aop:)
+BuildRequires:  %{?module_prefix}mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
-BuildRequires:  mvn(javax.annotation:jsr250-api)
-BuildRequires:  mvn(javax.inject:javax.inject)
+BuildRequires:  %{?module_prefix}mvn(javax.annotation:jsr250-api)
+BuildRequires:  %{?module_prefix}mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.commons:commons-lang3)
+BuildRequires:  %{?module_prefix}mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-api)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-connector-basic)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-impl)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-spi)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-transport-wagon)
-BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-util)
-BuildRequires:  mvn(org.apache.maven.shared:maven-shared-utils)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-api)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-connector-basic)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-impl)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-spi)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-transport-wagon)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.resolver:maven-resolver-util)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.shared:maven-shared-utils)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-file)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-http::shaded:)
-BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
+BuildRequires:  %{?module_prefix}mvn(org.apache.maven.wagon:wagon-provider-api)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.10.0
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
+BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-classworlds)
+BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-interpolation)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
+BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-interpolation)
+BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
+BuildRequires:  %{?module_prefix}mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
+BuildRequires:  %{?module_prefix}mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
 BuildRequires:  mvn(org.mockito:mockito-core) >= 2
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
+BuildRequires:  %{?module_prefix}mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
+BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-cipher)
+BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
 
-Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
+Requires:       %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 
 Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
 Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
@@ -82,34 +82,34 @@ Recommends: java-devel
 # by XMvn.  It would be possible to explicitly specify only
 # dependencies which are not generated automatically, but adding
 # everything seems to be easier.
-Requires:       aopalliance
-Requires:       apache-commons-cli
-Requires:       apache-commons-codec
-Requires:       apache-commons-io
-Requires:       apache-commons-lang3
-Requires:       apache-commons-logging
-Requires:       atinject
-Requires:       cdi-api
-Requires:       geronimo-annotation
-Requires:       google-guice
-Requires:       guava
-Requires:       hawtjni-runtime
-Requires:       httpcomponents-client
-Requires:       httpcomponents-core
-Requires:       jansi
-Requires:       jansi-native
-Requires:       jcl-over-slf4j
-Requires:       maven-resolver
-Requires:       maven-shared-utils
-Requires:       maven-wagon
-Requires:       plexus-cipher
-Requires:       plexus-classworlds
-Requires:       plexus-containers-component-annotations
-Requires:       plexus-interpolation
-Requires:       plexus-sec-dispatcher
-Requires:       plexus-utils
-Requires:       sisu
-Requires:       slf4j
+Requires:       %{?module_prefix}aopalliance
+Requires:       %{?module_prefix}apache-commons-cli
+Requires:       %{?module_prefix}apache-commons-codec
+Requires:       %{?module_prefix}apache-commons-io
+Requires:       %{?module_prefix}apache-commons-lang3
+Requires:       %{?module_prefix}apache-commons-logging
+Requires:       %{?module_prefix}atinject
+Requires:       %{?module_prefix}cdi-api
+Requires:       %{?module_prefix}geronimo-annotation
+Requires:       %{?module_prefix}google-guice
+Requires:       %{?module_prefix}guava
+Requires:       %{?module_prefix}hawtjni-runtime
+Requires:       %{?module_prefix}httpcomponents-client
+Requires:       %{?module_prefix}httpcomponents-core
+Requires:       %{?module_prefix}jansi
+Requires:       %{?module_prefix}jansi-native
+Requires:       %{?module_prefix}jcl-over-slf4j
+Requires:       %{?module_prefix}maven-resolver
+Requires:       %{?module_prefix}maven-shared-utils
+Requires:       %{?module_prefix}maven-wagon
+Requires:       %{?module_prefix}plexus-cipher
+Requires:       %{?module_prefix}plexus-classworlds
+Requires:       %{?module_prefix}plexus-containers-component-annotations
+Requires:       %{?module_prefix}plexus-interpolation
+Requires:       %{?module_prefix}plexus-sec-dispatcher
+Requires:       %{?module_prefix}plexus-utils
+Requires:       %{?module_prefix}sisu
+Requires:       %{?module_prefix}slf4j
 
 %description
 Maven is a software project management and comprehension tool. Based on the
