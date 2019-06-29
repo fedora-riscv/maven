@@ -134,11 +134,7 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 %description    lib
 Core part of Apache Maven that can be used as a library.
 
-%package        javadoc
-Summary:        API documentation for %{name}
-
-%description    javadoc
-%{summary}.
+%{?javadoc_package}
 
 %prep
 %setup -q -n apache-%{name}-%{version}
@@ -252,9 +248,6 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %{_datadir}/bash-completion
 %ghost %{_mandir}/man1/mvn.1.gz
 %ghost %{_mandir}/man1/mvnDebug.1.gz
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
 
 
 %changelog
