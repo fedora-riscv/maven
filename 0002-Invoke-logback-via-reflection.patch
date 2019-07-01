@@ -1,4 +1,4 @@
-From 4fa2cfaa19a0752a656b2a223a77c3af25d2de12 Mon Sep 17 00:00:00 2001
+From 7610a10691e680db00edcbd4ce6767a30641cd71 Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
 Date: Tue, 6 Jun 2017 13:47:43 +0200
 Subject: [PATCH 2/4] Invoke logback via reflection

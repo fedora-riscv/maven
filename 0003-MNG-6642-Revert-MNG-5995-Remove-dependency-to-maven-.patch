@@ -1,4 +1,4 @@
-From c533aada209c517c1666989d7115672e7522aa72 Mon Sep 17 00:00:00 2001
+From 56d10f48ebb2cdaf3882dc8afbef65a2ab529040 Mon Sep 17 00:00:00 2001
 From: Sylwester Lachiewicz <slachiewicz@apache.org>
 Date: Sat, 13 Oct 2018 04:16:44 +0200
 Subject: [PATCH 3/4] [MNG-6642] Revert "[MNG-5995] Remove dependency to

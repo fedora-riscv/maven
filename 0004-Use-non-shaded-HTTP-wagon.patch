@@ -1,4 +1,4 @@
-From 59092ee77227c480d3665d62554f0f0023d8a6c7 Mon Sep 17 00:00:00 2001
+From c8933d155694ce37b1d4be59a744c8f7cbde6bb5 Mon Sep 17 00:00:00 2001
 From: Mikolaj Izdebski <mizdebsk@redhat.com>
 Date: Mon, 1 Jul 2019 09:51:56 +0200
 Subject: [PATCH 4/4] Use non-shaded HTTP wagon
