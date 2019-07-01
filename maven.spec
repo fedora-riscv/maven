@@ -72,10 +72,14 @@ BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 Summary: %{summary}
 %endif
 
-Requires:       %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
+Requires: %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 
 Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
 Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
+
+# Require full javapackages-tools since maven-script uses
+# /usr/share/java-utils/java-functions
+Requires: javapackages-tools
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
@@ -97,9 +101,6 @@ Summary:        Core part of Maven
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
 
-# Require full javapackages-tools since maven-script uses
-# /usr/share/java-utils/java-functions
-Requires:       javapackages-tools
 # Maven upstream uses patched version of SLF4J.  They unpack
 # slf4j-simple-sources.jar, apply non-upstreamable, Maven-specific
 # patch (using a script written in Groovy), compile and package as
@@ -187,6 +188,14 @@ install -d -m 755 %{buildroot}%{_mandir}/man1/
 touch %{buildroot}%{_bindir}/{mvn,mvnDebug}
 touch %{buildroot}%{_mandir}/man1/{mvn,mvnDebug}.1
 
+# Versioned commands and manpages
+%if 0%{?maven_version_suffix:1}
+ln -s %{homedir}/bin/mvn %{buildroot}%{_bindir}/mvn%{maven_version_suffix}
+ln -s %{homedir}/bin/mvnDebug %{buildroot}%{_bindir}/mvnDebug%{maven_version_suffix}
+ln -s %{homedir}/bin/mvn.1.gz %{buildroot}%{_mandir}/man1/mvn%{maven_version_suffix}.1.gz
+ln -s %{homedir}/bin/mvnDebug.1.gz %{buildroot}%{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
+%endif
+
 
 %post -n %{?module_prefix}%{name}
 update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alternatives_priority}0 \
@@ -214,6 +223,12 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %{_datadir}/bash-completion
 %ghost %{_mandir}/man1/mvn.1.gz
 %ghost %{_mandir}/man1/mvnDebug.1.gz
+%if 0%{?maven_version_suffix:1}
+%{_bindir}/mvn%{maven_version_suffix}
+%{_bindir}/mvnDebug%{maven_version_suffix}
+%{_mandir}/man1/mvn%{maven_version_suffix}.1.gz
+%{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
+%endif
 
 
 %changelog
