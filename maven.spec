@@ -67,6 +67,11 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
+%if 0%{?module_prefix:1}
+%package -n %{module_prefix}%{name}
+Summary: %{summary}
+%endif
+
 Requires:       %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 
 Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
@@ -75,6 +80,11 @@ Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
 Recommends: java-devel
+
+%if 0%{?module_prefix:1}
+%description -n %{module_prefix}%{name}
+%{summary}.
+%endif
 
 %description
 Maven is a software project management and comprehension tool. Based on the
@@ -99,7 +109,6 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 %description -n %{?module_prefix}%{name}-lib
 Core part of Apache Maven that can be used as a library.
 
-%{?module_package}
 %{?javadoc_package}
 
 %prep
