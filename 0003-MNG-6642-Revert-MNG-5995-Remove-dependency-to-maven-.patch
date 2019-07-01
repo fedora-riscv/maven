@@ -1,7 +1,7 @@
 From c533aada209c517c1666989d7115672e7522aa72 Mon Sep 17 00:00:00 2001
 From: Sylwester Lachiewicz <slachiewicz@apache.org>
 Date: Sat, 13 Oct 2018 04:16:44 +0200
-Subject: [PATCH 3/3] [MNG-6642] Revert "[MNG-5995] Remove dependency to
+Subject: [PATCH 3/4] [MNG-6642] Revert "[MNG-5995] Remove dependency to
  maven-compat (#185)"
 
 This partially reverts commit bb3ec5da71d26d105972392f0a20bc61bc5d8c53 to restore working with Tycho P2 repository.
