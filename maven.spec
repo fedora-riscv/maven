@@ -136,6 +136,7 @@ sed -i "
 
 %mvn_package :apache-maven __noinstall
 
+%pom_change_dep :jansi :::runtime maven-embedder
 %pom_remove_dep -r :logback-classic
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
