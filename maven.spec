@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -23,6 +23,8 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-MNG-6642-Revert-MNG-5995-Remove-dependency-to-maven-.patch
 Patch4:         0004-Use-non-shaded-HTTP-wagon.patch
+# TODO Should not be needed after 3.6.1
+Patch5:         0005-Port-to-modello-version-1.11.patch
 
 BuildRequires:  maven-local
 BuildRequires:  %{?module_prefix}mvn(com.google.inject:guice::no_aop:)
@@ -119,6 +121,7 @@ Core part of Apache Maven that can be used as a library.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -232,6 +235,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Wed Jul 03 2019 Marian Koncek <mkoncek@redhat.com> - 1:3.6.1-5
+- Port to modello version 1.11
+
 * Thu May 30 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-4
 - Backport upstream fix for Tycho P2 integarion
 
