@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -272,6 +272,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.4-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Wed Apr 17 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.4-10
 - Update to Mockito 2
 
