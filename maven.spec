@@ -85,7 +85,11 @@ Requires: javapackages-tools
 
 # Theoretically Maven might be usable with just JRE, but typical Maven
 # workflow requires full JDK, so we recommend it here.
+%if 0%{?fedora} || 0%{?rhel} > 7
 Recommends: java-devel
+%else
+Requires: java-devel
+%endif
 
 %if 0%{?module_prefix:1}
 %description -n %{module_prefix}%{name}
