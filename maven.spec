@@ -76,8 +76,13 @@ Summary: %{summary}
 
 Requires: %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 
+%if 0%{?fedora}
 Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
 Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
+%else
+Requires(post): chkconfig
+Requires(postun): chkconfig
+%endif
 
 # Require full javapackages-tools since maven-script uses
 # /usr/share/java-utils/java-functions
