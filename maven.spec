@@ -1,4 +1,4 @@
-%bcond_without  logback
+%bcond_with logback
 
 %global bundled_slf4j_version 1.7.25
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.5.4
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -272,6 +272,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu Aug 29 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.5.4-12
+- Remove dependency on logback-classic.
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.4-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
