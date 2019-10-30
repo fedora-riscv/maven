@@ -130,6 +130,12 @@ Core part of Apache Maven that can be used as a library.
 %patch3 -p1
 %patch4 -p1
 
+# TODO Delete after maven-3.6.3
+# Fix Tycho pomless build
+# https://issues.apache.org/jira/browse/MNG-6765
+# https://github.com/apache/maven/commit/07ab962c85950b034be3216996900920c0204c3a
+sed -i 's/@Named/@Named\( "core-default" \)/' maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelProcessor.java
+
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
 find -name '*.class' -delete
