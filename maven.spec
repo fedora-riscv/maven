@@ -67,6 +67,7 @@ BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(xmlunit:xmlunit)
 
+BuildRequires:  cdi-api >= 1.2-8.1
 BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
 
 %if %{with logback}
@@ -218,10 +219,6 @@ xmvn-subst -R %{buildroot} -s %{buildroot}%{homedir}
 # Transitive deps of wagon-http, missing because of unshading
 build-jar-repository -s -p %{buildroot}%{homedir}/lib \
     commons-{codec,logging} httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
-
-# Transitive deps of cdi-api that should have been excluded
-rm %{buildroot}%{homedir}/lib/jboss-interceptors*.jar
-rm %{buildroot}%{homedir}/lib/javax.el-api*.jar
 
 # Native lib whose extraction we suppressed
 ln -s %{_jnidir}/jansi-native/jansi-linux.jar %{buildroot}%{homedir}/lib/
