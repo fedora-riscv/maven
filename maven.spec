@@ -230,7 +230,7 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 --slave %{_mandir}/man1/mvnDebug.1.gz mvnDebug1 %{homedir}/bin/mvn.1.gz \
 
 %postun -n %{?module_prefix}%{name}
-[[ $1 -eq 0 ]] && update-alternatives --remove %{name} %{homedir}/bin/mvn
+[[ $1 -eq 0 ]] && update-alternatives --remove mvn %{homedir}/bin/mvn
 
 
 %files -n %{?module_prefix}%{name}-lib -f .mfiles
