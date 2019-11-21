@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -98,7 +98,7 @@ Requires:       atinject
 Requires:       cdi-api
 Requires:       geronimo-annotation
 Requires:       google-guice
-Requires:       guava20
+Requires:       guava
 Requires:       hawtjni-runtime
 Requires:       httpcomponents-client
 Requires:       httpcomponents-core
@@ -276,6 +276,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu Nov 21 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-3
+- Require the correct version of guava.
+
 * Mon Nov 04 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-2
 - Fix postun scriptlet.
 
