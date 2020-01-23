@@ -74,7 +74,7 @@ Summary: %{summary}
 %endif
 
 Requires: %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
-Requires: %{?module_prefix}%{name}-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: %{?module_prefix}%{name}-jdk-binding
 Suggests: %{?module_prefix}%{name}-openjdk11 = %{epoch}:%{version}-%{release}
 
 %if 0%{?fedora}
