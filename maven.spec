@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -74,6 +74,8 @@ Summary: %{summary}
 %endif
 
 Requires: %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
+Requires: %{?module_prefix}%{name}-jdk-binding = %{epoch}:%{version}-%{release}
+Suggests: %{?module_prefix}%{name}-openjdk8 = %{epoch}:%{version}-%{release}
 
 %if 0%{?fedora}
 Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
@@ -86,14 +88,6 @@ Requires(postun): chkconfig
 # Require full javapackages-tools since maven-script uses
 # /usr/share/java-utils/java-functions
 Requires: javapackages-tools
-
-# Theoretically Maven might be usable with just JRE, but typical Maven
-# workflow requires full JDK, so we recommend it here.
-%if 0%{?fedora} || 0%{?rhel} > 7
-Recommends: java-devel
-%else
-Requires: java-devel
-%endif
 
 %if 0%{?module_prefix:1}
 %description -n %{module_prefix}%{name}
@@ -119,6 +113,30 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
 %description -n %{?module_prefix}%{name}-lib
 Core part of Apache Maven that can be used as a library.
+
+%package -n %{?module_prefix}%{name}-openjdk8
+Summary:        OpenJDK 8 binding
+RemovePathPostfixes: -openjdk8
+Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: maven = %{epoch}:%{version}-%{release}
+Requires: java-1.8.0-openjdk-headless
+Recommends: java-1.8.0-openjdk-devel
+
+%description -n %{?module_prefix}%{name}-openjdk8
+OpenJDK 8 binding
+
+%package -n %{?module_prefix}%{name}-openjdk11
+Summary:        OpenJDK 11 binding
+RemovePathPostfixes: -openjdk11
+Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: maven = %{epoch}:%{version}-%{release}
+Requires: java-11-openjdk-headless
+# Theoretically Maven might be usable with just JRE, but typical Maven
+# workflow requires full JDK, so we recommend it here.
+Recommends: java-11-openjdk-devel
+
+%description -n %{?module_prefix}%{name}-openjdk11
+OpenJDK 11 binding
 
 %{?javadoc_package}
 
@@ -176,7 +194,7 @@ sed -i "
 </plugin>' maven-model-builder/pom.xml
 
 %build
-%mvn_build -- -Dproject.build.sourceEncoding=UTF-8
+%mvn_build -f -- -Dproject.build.sourceEncoding=UTF-8
 
 mkdir m2home
 (cd m2home
@@ -222,6 +240,11 @@ ln -s %{homedir}/bin/mvn.1.gz %{buildroot}%{_mandir}/man1/mvn%{maven_version_suf
 ln -s %{homedir}/bin/mvnDebug.1.gz %{buildroot}%{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
 %endif
 
+# JDK bindings
+install -d -m 755 %{buildroot}%{_javaconfdir}/
+echo JAVA_HOME=%{_jvmlibdir}/java-1.8.0-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk8
+echo JAVA_HOME=%{_jvmlibdir}/java-11-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk11
+
 
 %post -n %{?module_prefix}%{name}
 update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alternatives_priority}0 \
@@ -256,8 +279,16 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
 %endif
 
+%files openjdk8
+%config %{_javaconfdir}/maven.conf-openjdk8
+
+%files openjdk11
+%config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Thu Jan 23 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-3
+- Implement JDK bindings
+
 * Tue Nov 05 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-2
 - Mass rebuild for javapackages-tools 201902
 
