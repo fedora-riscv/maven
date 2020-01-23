@@ -196,7 +196,7 @@ sed -i "
 </plugin>' maven-model-builder/pom.xml
 
 %build
-%mvn_build -f -- -Dproject.build.sourceEncoding=UTF-8
+%mvn_build -- -Dproject.build.sourceEncoding=UTF-8
 
 mkdir m2home
 (cd m2home
