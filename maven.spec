@@ -119,8 +119,7 @@ Summary:        OpenJDK 8 binding
 RemovePathPostfixes: -openjdk8
 Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
 Requires: maven = %{epoch}:%{version}-%{release}
-Requires: java-1.8.0-openjdk-headless
-Recommends: java-1.8.0-openjdk-devel
+Requires: java-1.8.0-openjdk-devel
 Conflicts: maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk8
@@ -131,10 +130,7 @@ Summary:        OpenJDK 11 binding
 RemovePathPostfixes: -openjdk11
 Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
 Requires: maven = %{epoch}:%{version}-%{release}
-Requires: java-11-openjdk-headless
-# Theoretically Maven might be usable with just JRE, but typical Maven
-# workflow requires full JDK, so we recommend it here.
-Recommends: java-11-openjdk-devel
+Requires: java-11-openjdk-devel
 Conflicts: maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk11
