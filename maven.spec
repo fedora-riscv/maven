@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -24,7 +24,7 @@ Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
 Patch4:         0004-Remove-dependency-on-powermock.patch
 
-BuildRequires:  maven-local
+BuildRequires:  maven-local-openjdk8
 BuildRequires:  %{?module_prefix}mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  %{?module_prefix}mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
@@ -284,6 +284,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Sat Jan 25 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-4
+- Build with OpenJDK 8
+
 * Thu Jan 23 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-3
 - Implement JDK bindings
 
