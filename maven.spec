@@ -115,7 +115,7 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 Core part of Apache Maven that can be used as a library.
 
 %package -n %{?module_prefix}%{name}-openjdk8
-Summary:        OpenJDK 8 binding
+Summary:        OpenJDK 8 binding for Maven
 RemovePathPostfixes: -openjdk8
 Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
 Requires: maven = %{epoch}:%{version}-%{release}
@@ -123,10 +123,10 @@ Requires: java-1.8.0-openjdk-devel
 Conflicts: maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk8
-OpenJDK 8 binding
+Configures Maven to run with OpenJDK 8.
 
 %package -n %{?module_prefix}%{name}-openjdk11
-Summary:        OpenJDK 11 binding
+Summary:        OpenJDK 11 binding for Maven
 RemovePathPostfixes: -openjdk11
 Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
 Requires: maven = %{epoch}:%{version}-%{release}
@@ -134,7 +134,7 @@ Requires: java-11-openjdk-devel
 Conflicts: maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk11
-OpenJDK 11 binding
+Configures Maven to run with OpenJDK 11.
 
 %{?javadoc_package}
 
