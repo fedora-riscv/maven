@@ -1,4 +1,4 @@
-%global bundled_slf4j_version 1.7.28
+%global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
