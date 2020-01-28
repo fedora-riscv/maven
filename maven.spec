@@ -1,13 +1,13 @@
 %bcond_with logback
 
-%global bundled_slf4j_version 1.7.25
+%global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -276,6 +276,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Tue Jan 28 2019 Dinesh Prasanth M K <dmoluguw@redhat.com> - 1:3.6.1-5
+- Require the updated version of slf4j.
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
