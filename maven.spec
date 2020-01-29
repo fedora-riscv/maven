@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -276,6 +276,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Thu Nov 21 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-3
 - Require the correct version of guava.
 
