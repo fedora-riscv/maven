@@ -85,10 +85,6 @@ Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
 
-# Require full javapackages-tools since maven-script uses
-# /usr/share/java-utils/java-functions
-Requires: javapackages-tools
-
 %if 0%{?module_prefix:1}
 %description -n %{module_prefix}%{name}
 %{summary}.
