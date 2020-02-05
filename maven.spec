@@ -276,7 +276,7 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
-* Tue Jan 28 2019 Dinesh Prasanth M K <dmoluguw@redhat.com> - 1:3.6.1-5
+* Wed Feb 05 2020 Dinesh Prasanth M K <dmoluguw@redhat.com> - 1:3.6.1-5
 - Require the updated version of slf4j.
 
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-4
