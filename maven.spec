@@ -4,16 +4,16 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.6.2
-Release:        4%{?dist}
+Version:        3.6.3
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
 License:        ASL 2.0 and MIT
-URL:            http://maven.apache.org/
+URL:            https://maven.apache.org/
 BuildArch:      noarch
 
-Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/sources/apache-%{name}-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 
@@ -137,16 +137,13 @@ Configures Maven to run with OpenJDK 11.
 %prep
 %setup -q -n apache-%{name}-%{version}
 
+find -name '*.java' -exec sed -i 's/\r//' {} +
+find -name 'pom.xml' -exec sed -i 's/\r//' {} +
+
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-
-# TODO Delete after maven-3.6.3
-# Fix Tycho pomless build
-# https://issues.apache.org/jira/browse/MNG-6765
-# https://github.com/apache/maven/commit/07ab962c85950b034be3216996900920c0204c3a
-sed -i 's/@Named/@Named\( "core-default" \)/' maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelProcessor.java
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -280,6 +277,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Thu Feb 27 2020 Marian Koncek <mkoncek@redhat.com> - 1:3.6.3-1
+- Update to upstream version 3.6.3
+
 * Sat Jan 25 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-4
 - Build with OpenJDK 8
 

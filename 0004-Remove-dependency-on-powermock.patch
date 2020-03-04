@@ -8,7 +8,7 @@ Subject: [PATCH] Remove dependency on powermock
  1 file changed, 66 deletions(-)
 
 diff --git a/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java b/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
-index b66abca..a5b2aa0 100644
+index 45800d6..fbf3b23 100644
 --- a/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
 +++ b/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
 @@ -36,8 +36,6 @@ import java.util.concurrent.FutureTask;
@@ -92,5 +92,5 @@ index b66abca..a5b2aa0 100644
          throws Exception
      {
 -- 
-2.21.0
+2.24.1
 
