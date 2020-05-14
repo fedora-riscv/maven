@@ -6,8 +6,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.6.1
-Release:        6%{?dist}
+Version:        3.6.2
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -23,10 +23,8 @@ Patch1:         0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
 Patch2:         0002-Invoke-logback-via-reflection.patch
-Patch3:         0003-MNG-6642-Revert-MNG-5995-Remove-dependency-to-maven-.patch
-Patch4:         0004-Use-non-shaded-HTTP-wagon.patch
-# TODO: this patch is not needed for maven 3.6.2+
-Patch5:         0005-Port-to-modello-version-1.11.patch
+Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
+Patch4:         0004-Remove-dependency-on-powermock.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -39,6 +37,7 @@ BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-failsafe-plugin)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-api)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-connector-basic)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-impl)
@@ -133,6 +132,7 @@ Maven is a software project management and comprehension tool. Based on the
 concept of a project object model (POM), Maven can manage a project's build,
 reporting and documentation from a central piece of information.
 
+
 %package        lib
 Summary:        Core part of Maven
 # If XMvn is part of the same RPM transaction then it should be
@@ -151,11 +151,13 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 %description    lib
 Core part of Apache Maven that can be used as a library.
 
+
 %package        javadoc
 Summary:        API documentation for %{name}
 
 %description    javadoc
 %{summary}.
+
 
 %prep
 %setup -q -n apache-%{name}-%{version}
@@ -163,12 +165,19 @@ Summary:        API documentation for %{name}
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
+
+# TODO: Delete after maven-3.6.3
+# Fix Tycho pomless build
+# https://issues.apache.org/jira/browse/MNG-6765
+# https://github.com/apache/maven/commit/07ab962c85950b034be3216996900920c0204c3a
+sed -i 's/@Named/@Named\( "core-default" \)/' maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelProcessor.java
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
 find -name '*.class' -delete
 find -name '*.bat' -delete
+
+%pom_remove_dep -r :powermock-reflect
 
 sed -i 's:\r::' apache-maven/src/conf/settings.xml
 
@@ -197,6 +206,14 @@ sed -i "
 %endif
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
+
+# inject missing sisu-maven-plugin in maven-model-builder
+%pom_xpath_inject 'pom:build/pom:plugins' '
+<plugin>
+    <groupId>org.eclipse.sisu</groupId>
+    <artifactId>sisu-maven-plugin</artifactId>
+</plugin>' maven-model-builder/pom.xml
+
 
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
@@ -279,6 +296,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu May 14 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.2-1
+- Update to version 3.6.2.
+
 * Thu May 14 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-6
 - Port to modello 1.11.
 
