@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -25,6 +25,8 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-MNG-6642-Revert-MNG-5995-Remove-dependency-to-maven-.patch
 Patch4:         0004-Use-non-shaded-HTTP-wagon.patch
+# TODO: this patch is not needed for maven 3.6.2+
+Patch5:         0005-Port-to-modello-version-1.11.patch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -161,6 +163,7 @@ Summary:        API documentation for %{name}
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -276,6 +279,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu May 14 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-6
+- Port to modello 1.11.
+
 * Wed Feb 05 2020 Dinesh Prasanth M K <dmoluguw@redhat.com> - 1:3.6.1-5
 - Require the updated version of slf4j.
 
