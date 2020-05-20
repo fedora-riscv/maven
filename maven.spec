@@ -66,7 +66,7 @@ BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
-BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
+BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
 
 %if 0%{?module_prefix:1}
 %package -n %{module_prefix}%{name}
