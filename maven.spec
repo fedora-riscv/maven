@@ -6,25 +6,27 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.6.2
+Version:        3.6.3
 Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
 License:        ASL 2.0 and MIT
-URL:            http://maven.apache.org/
-BuildArch:      noarch
 
-Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/sources/apache-%{name}-%{version}-src.tar.gz
+URL:            http://maven.apache.org/
+
+Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 
-Patch1:         0001-Adapt-mvn-script.patch
+Patch1:         0001-adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
-Patch2:         0002-Invoke-logback-via-reflection.patch
-Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
-Patch4:         0004-Remove-dependency-on-powermock.patch
+Patch2:         0002-invoke-logback-via-reflection.patch
+Patch3:         0003-use-non-shaded-HTTP-wagon.patch
+Patch4:         0004-remove-dependency-on-powermock.patch
+
+BuildArch:      noarch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
@@ -48,7 +50,7 @@ BuildRequires:  mvn(org.apache.maven.shared:maven-shared-utils)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-file)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-http)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
-BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.10.0
+BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.11
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
@@ -59,6 +61,8 @@ BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
+BuildRequires:  mvn(org.hamcrest:hamcrest-library)
+BuildRequires:  mvn(org.jsoup:jsoup)
 BuildRequires:  mvn(org.mockito:mockito-core) >= 2
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
@@ -165,12 +169,6 @@ Summary:        API documentation for %{name}
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
-
-# TODO: Delete after maven-3.6.3
-# Fix Tycho pomless build
-# https://issues.apache.org/jira/browse/MNG-6765
-# https://github.com/apache/maven/commit/07ab962c85950b034be3216996900920c0204c3a
-sed -i 's/@Named/@Named\( "core-default" \)/' maven-model-builder/src/main/java/org/apache/maven/model/building/DefaultModelProcessor.java
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -296,6 +294,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Mon May 25 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.3-1
+- Update to version 3.6.3.
+
 * Thu May 14 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.2-1
 - Update to version 3.6.2.
 

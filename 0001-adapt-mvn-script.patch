@@ -1,14 +1,14 @@
-From 056c94f86450c7c27f5bb11f98653c73bfe3d8e4 Mon Sep 17 00:00:00 2001
+From 405e23d53b66a688082ed8c22385c5174e212be4 Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
-Date: Wed, 1 Feb 2017 14:54:26 +0100
-Subject: [PATCH 1/4] Adapt mvn script
+Date: Mon, 25 May 2020 12:10:33 +0200
+Subject: [PATCH 1/4] adapt mvn script
 
 ---
  apache-maven/src/bin/mvn | 17 +++++++++++++++--
  1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/apache-maven/src/bin/mvn b/apache-maven/src/bin/mvn
-index a554c6617..0c07ba6e2 100755
+index a554c66..0c07ba6 100644
 --- a/apache-maven/src/bin/mvn
 +++ b/apache-maven/src/bin/mvn
 @@ -22,7 +22,7 @@
@@ -56,5 +56,5 @@ index a554c6617..0c07ba6e2 100755
  # make it fully qualified
  MAVEN_HOME=`cd "$MAVEN_HOME" && pwd`
 -- 
-2.21.0
+2.26.2
 
