@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -101,7 +101,7 @@ Requires:       apache-commons-lang3
 Requires:       apache-commons-logging
 Requires:       atinject
 Requires:       cdi-api
-Requires:       geronimo-annotation
+Requires:       jakarta-annotations
 Requires:       google-guice
 Requires:       guava
 Requires:       hawtjni-runtime
@@ -294,6 +294,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Thu Jun 25 2020 Alexander Kurtakov <akurtako@redhat.com> 1:3.6.3-2
+- Switch jsr250 to jakarta-anntations.
+
 * Mon May 25 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.3-1
 - Update to version 3.6.3.
 
