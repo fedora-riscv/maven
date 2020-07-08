@@ -46,18 +46,18 @@ BuildRequires:  %{?module_prefix}mvn(org.apache.maven.shared:maven-shared-utils)
 BuildRequires:  %{?module_prefix}mvn(org.apache.maven.wagon:wagon-file)
 BuildRequires:  %{?module_prefix}mvn(org.apache.maven.wagon:wagon-http)
 BuildRequires:  %{?module_prefix}mvn(org.apache.maven.wagon:wagon-provider-api)
-BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.10.0
+BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-interpolation)
-BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
+BuildRequires:  %{?module_prefix}mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  %{?module_prefix}mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  %{?module_prefix}mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  %{?module_prefix}mvn(org.fusesource.jansi:jansi)
-BuildRequires:  mvn(org.mockito:mockito-core) >= 2
+BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  %{?module_prefix}mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  %{?module_prefix}mvn(org.slf4j:slf4j-api)
 BuildRequires:  %{?module_prefix}mvn(org.slf4j:slf4j-simple)
@@ -66,7 +66,9 @@ BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 
-BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
+# XXX
+#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
+BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 
 %if 0%{?module_prefix:1}
 %package -n %{module_prefix}%{name}
