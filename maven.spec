@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -294,6 +294,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Fri Jul 10 2020 Jiri Vanek <jvanek@redhat.com> - 1:3.6.3-3
+- Rebuilt for JDK-11, see https://fedoraproject.org/wiki/Changes/Java11
+
 * Thu Jun 25 2020 Alexander Kurtakov <akurtako@redhat.com> 1:3.6.3-2
 - Switch jsr250 to jakarta-anntations.
 
