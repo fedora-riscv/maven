@@ -115,10 +115,10 @@ Core part of Apache Maven that can be used as a library.
 %package -n %{?module_prefix}%{name}-openjdk8
 Summary:        OpenJDK 8 binding for Maven
 RemovePathPostfixes: -openjdk8
-Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
-Requires: maven = %{epoch}:%{version}-%{release}
+Provides: %{?module_prefix}maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: %{?module_prefix}maven = %{epoch}:%{version}-%{release}
 Requires: java-1.8.0-openjdk-devel
-Conflicts: maven-jdk-binding
+Conflicts: %{?module_prefix}maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk8
 Configures Maven to run with OpenJDK 8.
@@ -126,10 +126,10 @@ Configures Maven to run with OpenJDK 8.
 %package -n %{?module_prefix}%{name}-openjdk11
 Summary:        OpenJDK 11 binding for Maven
 RemovePathPostfixes: -openjdk11
-Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
-Requires: maven = %{epoch}:%{version}-%{release}
+Provides: %{?module_prefix}maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: %{?module_prefix}maven = %{epoch}:%{version}-%{release}
 Requires: java-11-openjdk-devel
-Conflicts: maven-jdk-binding
+Conflicts: %{?module_prefix}maven-jdk-binding
 
 %description -n %{?module_prefix}%{name}-openjdk11
 Configures Maven to run with OpenJDK 11.
@@ -272,10 +272,10 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
 %endif
 
-%files openjdk8
+%files -n %{?module_prefix}%{name}-openjdk8
 %config %{_javaconfdir}/maven.conf-openjdk8
 
-%files openjdk11
+%files -n %{?module_prefix}%{name}-openjdk11
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
