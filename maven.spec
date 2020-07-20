@@ -205,7 +205,7 @@ install -d -m 755 %{buildroot}%{confdir}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions/
 
 cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
-%if !0%{?sclraw_phase}
+%if !0%{?mbi}
 xmvn-subst -R %{buildroot} -s %{buildroot}%{homedir}
 %endif
 
