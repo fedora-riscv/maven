@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -239,7 +239,7 @@ build-jar-repository -s -p %{buildroot}%{homedir}/lib \
     commons-{codec,logging} httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
 
 # Transitive deps of cdi-api that should have been excluded
-rm %{buildroot}%{homedir}/lib/jboss-interceptors*.jar
+rm %{buildroot}%{homedir}/lib/jakarta.interceptor-api*.jar
 rm %{buildroot}%{homedir}/lib/javax.el-api*.jar
 
 # Native lib whose extraction we suppressed
@@ -294,6 +294,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Tue Aug 25 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.3-5
+- Adapt to cdi-api switch from jboss-interceptor to jakarta-interceptor.
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.3-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
