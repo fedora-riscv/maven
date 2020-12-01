@@ -205,7 +205,7 @@ install -d -m 755 %{buildroot}%{confdir}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions/
 
 cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
-%if !0%{?mbi}
+%if "%{_module_name}" != "javapackages-bootstrap"
 xmvn-subst -s -R %{buildroot} -s %{buildroot}%{homedir}
 %endif
 
