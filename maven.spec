@@ -79,13 +79,8 @@ Requires: %{?module_prefix}%{name}-lib = %{epoch}:%{version}-%{release}
 Requires: %{?module_prefix}%{name}-jdk-binding
 Suggests: %{?module_prefix}%{name}-openjdk11 = %{epoch}:%{version}-%{release}
 
-%if 0%{?fedora}
-Requires(post): (alternatives if fedora-release >= 30 else chkconfig)
-Requires(postun): (alternatives if fedora-release >= 30 else chkconfig)
-%else
-Requires(post): chkconfig
-Requires(postun): chkconfig
-%endif
+Requires(post): alternatives
+Requires(postun): alternatives
 
 %if 0%{?module_prefix:1}
 %description -n %{module_prefix}%{name}
