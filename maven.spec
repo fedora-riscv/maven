@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -60,7 +60,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.fusesource.jansi:jansi)
+BuildRequires:  mvn(org.fusesource.jansi:jansi:1)
 BuildRequires:  mvn(org.hamcrest:hamcrest-library)
 BuildRequires:  mvn(org.jsoup:jsoup)
 BuildRequires:  mvn(org.mockito:mockito-core) >= 2
@@ -106,7 +106,7 @@ Requires:       guava
 Requires:       hawtjni-runtime
 Requires:       httpcomponents-client
 Requires:       httpcomponents-core
-Requires:       jansi
+Requires:       jansi1
 Requires:       jansi-native
 Requires:       jcl-over-slf4j
 Requires:       maven-resolver-api
@@ -211,6 +211,9 @@ sed -i "
     <artifactId>sisu-maven-plugin</artifactId>
 </plugin>' maven-model-builder/pom.xml
 
+# Update required version of jansi 1.x
+%pom_xpath_set "//pom:dependency[pom:artifactId='jansi']/pom:version" 1.18
+
 
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
@@ -293,6 +296,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 
 
 %changelog
+* Mon Dec 14 2020 Jerry James <loganjerry@gmail.com> - 1:3.6.3-7
+- Update jansi dep to jansi1
+
 * Wed Sep 30 2020 Christopher Tubbs <ctubbsii@fedoraproject.org> - 1:3.6.3-6
 - Remove unneeded commons-logging from runtime class path (rhbz#1883751)
 - Also remove redundant commons-codec
