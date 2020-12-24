@@ -5,7 +5,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -248,6 +248,7 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %doc README.md
 %license LICENSE NOTICE
 %{homedir}
+%exclude %{homedir}/bin/mvn*
 %dir %{confdir}
 %dir %{confdir}/logging
 %config(noreplace) %{_sysconfdir}/m2%{?maven_version_suffix}.conf
@@ -255,6 +256,7 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config(noreplace) %{confdir}/logging/simplelogger.properties
 
 %files -n %{?module_prefix}%{name}
+%{homedir}/bin/mvn*
 %ghost %{_bindir}/mvn
 %ghost %{_bindir}/mvnDebug
 %{_datadir}/bash-completion
@@ -274,6 +276,9 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Thu Dec 24 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-2
+- Move launcher scripts from maven-lib to maven package
+
 * Thu Feb 27 2020 Marian Koncek <mkoncek@redhat.com> - 1:3.6.3-1
 - Update to upstream version 3.6.3
 
