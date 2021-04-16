@@ -1,3 +1,5 @@
+%bcond_without bootstrap
+
 %global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
@@ -25,6 +27,9 @@ Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
 Patch4:         0004-Remove-dependency-on-powermock.patch
 
 BuildRequires:  maven-local-openjdk8
+%if %{with bootstrap}
+BuildRequires:  javapackages-bootstrap
+%else
 BuildRequires:  %{?module_prefix}mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  %{?module_prefix}mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
@@ -65,10 +70,13 @@ BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  %{?module_prefix}mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
+%endif
 
 # XXX
 #BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
+%if %{without bootstrap}
 BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
+%endif
 
 %if 0%{?module_prefix:1}
 %package -n %{module_prefix}%{name}
