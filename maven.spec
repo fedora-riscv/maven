@@ -1,4 +1,4 @@
-%bcond_with logback
+%bcond_with bootstrap
 
 %global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -12,23 +12,24 @@ Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
 License:        ASL 2.0 and MIT
+URL:            https://maven.apache.org/
+BuildArch:      noarch
 
-URL:            http://maven.apache.org/
-
-Source0:        http://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/%{name}/%{name}-3/%{version}/source/apache-%{name}-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 
-Patch1:         0001-adapt-mvn-script.patch
+Patch1:         0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids dependency on logback
 # Used only when %%without logback is in effect
-Patch2:         0002-invoke-logback-via-reflection.patch
-Patch3:         0003-use-non-shaded-HTTP-wagon.patch
-Patch4:         0004-remove-dependency-on-powermock.patch
+Patch2:         0002-Invoke-logback-via-reflection.patch
+Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
+Patch4:         0004-Remove-dependency-on-powermock.patch
 
-BuildArch:      noarch
-
-BuildRequires:  maven-local
+BuildRequires:  maven-local-openjdk8
+%if %{with bootstrap}
+BuildRequires:  javapackages-bootstrap
+%else
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
@@ -50,20 +51,18 @@ BuildRequires:  mvn(org.apache.maven.shared:maven-shared-utils)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-file)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-http)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
-BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin) >= 1.11
+BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-interpolation)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils) >= 3.2.0
+BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.fusesource.jansi:jansi:1)
-BuildRequires:  mvn(org.hamcrest:hamcrest-library)
-BuildRequires:  mvn(org.jsoup:jsoup)
-BuildRequires:  mvn(org.mockito:mockito-core) >= 2
+BuildRequires:  mvn(org.fusesource.jansi:jansi)
+BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
@@ -71,101 +70,73 @@ BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
-
-BuildRequires:  slf4j-sources = %{bundled_slf4j_version}
-
-%if %{with logback}
-BuildRequires:  mvn(ch.qos.logback:logback-classic)
 %endif
 
-Requires:       %{name}-lib = %{epoch}:%{version}-%{release}
+# XXX
+#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
+%if %{without bootstrap}
+BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
+%endif
 
-Requires(post): /usr/sbin/update-alternatives
-Requires(postun): /usr/sbin/update-alternatives
+Requires: %{name}-lib = %{epoch}:%{version}-%{release}
+Requires: %{name}-jdk-binding
+Suggests: %{name}-openjdk11 = %{epoch}:%{version}-%{release}
 
-# Theoretically Maven might be usable with just JRE, but typical Maven
-# workflow requires full JDK, so we recommend it here.
-%{?fedora:Recommends}%{!?fedora:Requires}: java-devel
-
-# XMvn does generate auto-requires, but explicit requires are still
-# needed because some symlinked JARs are not present in Maven POMs or
-# their dependency scope prevents them from being added automatically
-# by XMvn.  It would be possible to explicitly specify only
-# dependencies which are not generated automatically, but adding
-# everything seems to be easier.
-Requires:       aopalliance
-Requires:       apache-commons-cli
-Requires:       apache-commons-codec
-Requires:       apache-commons-io
-Requires:       apache-commons-lang3
-Requires:       atinject
-Requires:       cdi-api
-Requires:       jakarta-annotations
-Requires:       google-guice
-Requires:       guava
-Requires:       hawtjni-runtime
-Requires:       httpcomponents-client
-Requires:       httpcomponents-core
-Requires:       jansi1
-Requires:       jansi-native
-Requires:       jcl-over-slf4j
-Requires:       maven-resolver-api
-Requires:       maven-resolver-connector-basic
-Requires:       maven-resolver-impl
-Requires:       maven-resolver-spi
-Requires:       maven-resolver-transport-wagon
-Requires:       maven-resolver-util
-Requires:       maven-shared-utils
-Requires:       maven-wagon-file
-Requires:       maven-wagon-http
-Requires:       maven-wagon-http-shared
-Requires:       maven-wagon-provider-api
-Requires:       plexus-cipher
-Requires:       plexus-classworlds
-Requires:       plexus-containers-component-annotations
-Requires:       plexus-interpolation
-Requires:       plexus-sec-dispatcher
-Requires:       plexus-utils
-Requires:       sisu-inject
-Requires:       sisu-plexus
-Requires:       slf4j
+Requires(post): alternatives
+Requires(postun): alternatives
 
 %description
 Maven is a software project management and comprehension tool. Based on the
 concept of a project object model (POM), Maven can manage a project's build,
 reporting and documentation from a central piece of information.
 
-
-%package        lib
+%package lib
 Summary:        Core part of Maven
 # If XMvn is part of the same RPM transaction then it should be
 # installed first to avoid triggering rhbz#1014355.
 OrderWithRequires: xmvn-minimal
 
-# Require full javapackages-tools since maven-script uses
-# /usr/share/java-utils/java-functions
-Requires:       javapackages-tools
 # Maven upstream uses patched version of SLF4J.  They unpack
 # slf4j-simple-sources.jar, apply non-upstreamable, Maven-specific
 # patch (using a script written in Groovy), compile and package as
 # maven-slf4j-provider.jar, together with Maven-specific additions.
 Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
-%description    lib
+%description lib
 Core part of Apache Maven that can be used as a library.
 
+%package openjdk8
+Summary:        OpenJDK 8 binding for Maven
+RemovePathPostfixes: -openjdk8
+Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: maven = %{epoch}:%{version}-%{release}
+Requires: java-1.8.0-openjdk-devel
+Conflicts: maven-jdk-binding
 
-%package        javadoc
-Summary:        API documentation for %{name}
+%description openjdk8
+Configures Maven to run with OpenJDK 8.
 
-%description    javadoc
-%{summary}.
+%package openjdk11
+Summary:        OpenJDK 11 binding for Maven
+RemovePathPostfixes: -openjdk11
+Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: maven = %{epoch}:%{version}-%{release}
+Requires: java-11-openjdk-devel
+Conflicts: maven-jdk-binding
 
+%description openjdk11
+Configures Maven to run with OpenJDK 11.
+
+%{?javadoc_package}
 
 %prep
 %setup -q -n apache-%{name}-%{version}
 
+find -name '*.java' -exec sed -i 's/\r//' {} +
+find -name 'pom.xml' -exec sed -i 's/\r//' {} +
+
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 
@@ -197,23 +168,16 @@ sed -i "
 
 %mvn_package :apache-maven __noinstall
 
-%if %{without logback}
+%pom_change_dep :jansi :::runtime maven-embedder
 %pom_remove_dep -r :logback-classic
-%patch2 -p1
-%endif
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
 
-# inject missing sisu-maven-plugin in maven-model-builder
 %pom_xpath_inject 'pom:build/pom:plugins' '
 <plugin>
-    <groupId>org.eclipse.sisu</groupId>
-    <artifactId>sisu-maven-plugin</artifactId>
+	<groupId>org.eclipse.sisu</groupId>
+	<artifactId>sisu-maven-plugin</artifactId>
 </plugin>' maven-model-builder/pom.xml
-
-# Update required version of jansi 1.x
-%pom_xpath_set "//pom:dependency[pom:artifactId='jansi']/pom:version" 1.18
-
 
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
@@ -234,18 +198,9 @@ install -d -m 755 %{buildroot}%{confdir}
 install -d -m 755 %{buildroot}%{_datadir}/bash-completion/completions/
 
 cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
-xmvn-subst -R %{buildroot} -s %{buildroot}%{homedir}
-
-# Transitive deps of wagon-http, missing because of unshading
-build-jar-repository -s -p %{buildroot}%{homedir}/lib \
-    httpcomponents/{httpclient,httpcore} maven-wagon/http-shared
-
-# Transitive deps of cdi-api that should have been excluded
-rm %{buildroot}%{homedir}/lib/jakarta.interceptor-api*.jar
-rm %{buildroot}%{homedir}/lib/javax.el-api*.jar
-
-# Native lib whose extraction we suppressed
-ln -s %{_jnidir}/jansi-native/jansi-linux.jar %{buildroot}%{homedir}/lib/
+%if "%{_module_name}" != "javapackages-bootstrap"
+xmvn-subst -s -R %{buildroot} -s %{buildroot}%{homedir}
+%endif
 
 install -p -m 644 %{SOURCE2} %{buildroot}%{homedir}/bin/
 gzip -9 %{buildroot}%{homedir}/bin/mvn.1
@@ -263,6 +218,19 @@ install -d -m 755 %{buildroot}%{_mandir}/man1/
 touch %{buildroot}%{_bindir}/{mvn,mvnDebug}
 touch %{buildroot}%{_mandir}/man1/{mvn,mvnDebug}.1
 
+# Versioned commands and manpages
+%if 0%{?maven_version_suffix:1}
+ln -s %{homedir}/bin/mvn %{buildroot}%{_bindir}/mvn%{maven_version_suffix}
+ln -s %{homedir}/bin/mvnDebug %{buildroot}%{_bindir}/mvnDebug%{maven_version_suffix}
+ln -s %{homedir}/bin/mvn.1.gz %{buildroot}%{_mandir}/man1/mvn%{maven_version_suffix}.1.gz
+ln -s %{homedir}/bin/mvnDebug.1.gz %{buildroot}%{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
+%endif
+
+# JDK bindings
+install -d -m 755 %{buildroot}%{_javaconfdir}/
+echo JAVA_HOME=%{_jvmlibdir}/java-1.8.0-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk8
+echo JAVA_HOME=%{_jvmlibdir}/java-11-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk11
+
 
 %post
 update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alternatives_priority}0 \
@@ -273,11 +241,11 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %postun
 [[ $1 -eq 0 ]] && update-alternatives --remove mvn %{homedir}/bin/mvn
 
-
 %files lib -f .mfiles
 %doc README.md
 %license LICENSE NOTICE
 %{homedir}
+%exclude %{homedir}/bin/mvn*
 %dir %{confdir}
 %dir %{confdir}/logging
 %config(noreplace) %{_sysconfdir}/m2%{?maven_version_suffix}.conf
@@ -285,19 +253,31 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 %config(noreplace) %{confdir}/logging/simplelogger.properties
 
 %files
+%{homedir}/bin/mvn*
 %ghost %{_bindir}/mvn
 %ghost %{_bindir}/mvnDebug
 %{_datadir}/bash-completion
 %ghost %{_mandir}/man1/mvn.1.gz
 %ghost %{_mandir}/man1/mvnDebug.1.gz
+%if 0%{?maven_version_suffix:1}
+%{_bindir}/mvn%{maven_version_suffix}
+%{_bindir}/mvnDebug%{maven_version_suffix}
+%{_mandir}/man1/mvn%{maven_version_suffix}.1.gz
+%{_mandir}/man1/mvnDebug%{maven_version_suffix}.1.gz
+%endif
 
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
+%files openjdk8
+%config %{_javaconfdir}/maven.conf-openjdk8
 
+%files openjdk11
+%config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.3-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Thu Dec 24 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-2
+- Move launcher scripts from maven-lib to maven package
 
 * Mon Dec 14 2020 Jerry James <loganjerry@gmail.com> - 1:3.6.3-7
 - Update jansi dep to jansi1
@@ -327,14 +307,26 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 * Thu May 14 2020 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-6
 - Port to modello 1.11.
 
+* Thu Feb 27 2020 Marian Koncek <mkoncek@redhat.com> - 1:3.6.3-1
+- Update to upstream version 3.6.3
+
 * Wed Feb 05 2020 Dinesh Prasanth M K <dmoluguw@redhat.com> - 1:3.6.1-5
 - Require the updated version of slf4j.
 
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
+* Sat Jan 25 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-4
+- Build with OpenJDK 8
+
+* Thu Jan 23 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-3
+- Implement JDK bindings
+
 * Thu Nov 21 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-3
 - Require the correct version of guava.
+
+* Tue Nov 05 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.2-2
+- Mass rebuild for javapackages-tools 201902
 
 * Mon Nov 04 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-2
 - Fix postun scriptlet.
@@ -342,14 +334,35 @@ update-alternatives --install %{_bindir}/mvn mvn %{homedir}/bin/mvn %{?maven_alt
 * Wed Oct 16 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.6.1-1
 - Update to version 3.6.1.
 
+* Thu Oct 03 2019 Marian Koncek <mkoncek@redhat.com> - 1:3.6.2-1
+- Update to upstream version 3.6.2
+
 * Thu Aug 29 2019 Fabio Valentini <decathorpe@gmail.com> - 1:3.5.4-12
 - Remove dependency on logback-classic.
 
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.5.4-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
+* Wed Jul 03 2019 Marian Koncek <mkoncek@redhat.com> - 1:3.6.1-5
+- Port to modello version 1.11
+
+* Thu May 30 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-4
+- Backport upstream fix for Tycho P2 integarion
+
+* Fri May 24 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-3
+- Mass rebuild for javapackages-tools 201901
+
 * Wed Apr 17 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.4-10
 - Update to Mockito 2
+
+* Wed Apr 17 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-2
+- Update to Mockito 2
+
+* Sat Apr 13 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.1-1
+- Update to upstream version 3.6.1
+
+* Fri Apr 12 2019 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.5.4-6
+- Update SLF4J version to 1.7.26
 
 * Wed Mar 20 2019 Peter Robinson <pbrobinson@fedoraproject.org> 1:3.5.4-9
 - Fix dependency on alternatives

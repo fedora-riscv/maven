@@ -1,14 +1,14 @@
-From 405e23d53b66a688082ed8c22385c5174e212be4 Mon Sep 17 00:00:00 2001
+From 247eafd819d6092661ebc57c54815acd20abd3de Mon Sep 17 00:00:00 2001
 From: Michael Simacek <msimacek@redhat.com>
-Date: Mon, 25 May 2020 12:10:33 +0200
-Subject: [PATCH 1/4] adapt mvn script
+Date: Wed, 1 Feb 2017 14:54:26 +0100
+Subject: [PATCH 1/4] Adapt mvn script
 
 ---
- apache-maven/src/bin/mvn | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ apache-maven/src/bin/mvn | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/apache-maven/src/bin/mvn b/apache-maven/src/bin/mvn
-index a554c66..0c07ba6 100644
+index a554c6617..739501af4 100755
 --- a/apache-maven/src/bin/mvn
 +++ b/apache-maven/src/bin/mvn
 @@ -22,7 +22,7 @@
@@ -20,13 +20,11 @@ index a554c66..0c07ba6 100644
  #   MAVEN_OPTS      (Optional) Java runtime options used when Maven is executed.
  #   MAVEN_SKIP_RC   (Optional) Flag to disable loading of mavenrc files.
  # -----------------------------------------------------------------------------
-@@ -33,12 +33,24 @@ if [ -z "$MAVEN_SKIP_RC" ] ; then
+@@ -33,12 +33,16 @@ if [ -z "$MAVEN_SKIP_RC" ] ; then
      . /etc/mavenrc
    fi
  
-+  if [ -f /etc/java/maven.conf ] ; then
-+    . /etc/java/maven.conf
-+  fi
++  . /etc/java/maven.conf
 +
    if [ -f "$HOME/.mavenrc" ] ; then
      . "$HOME/.mavenrc"
@@ -34,18 +32,12 @@ index a554c66..0c07ba6 100644
  
  fi
  
-+if [ -f /usr/share/java-utils/java-functions ] ; then
-+  . /usr/share/java-utils/java-functions
-+  set_jvm
-+  set_javacmd
-+fi
 +export JAVA_HOME
-+export JAVACMD
 +
  # OS specific support. $var _must_ be set to either true or false.
  cygwin=false;
  mingw=false;
-@@ -63,7 +75,8 @@ done
+@@ -63,7 +67,8 @@ done
  
  saveddir=`pwd`
  
@@ -56,5 +48,5 @@ index a554c66..0c07ba6 100644
  # make it fully qualified
  MAVEN_HOME=`cd "$MAVEN_HOME" && pwd`
 -- 
-2.26.2
+2.21.0
 
