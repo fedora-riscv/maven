@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -273,6 +273,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Mon May 17 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-9
+- Bootstrap build
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.3-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
