@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 %global bundled_slf4j_version 1.7.30
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -275,6 +275,7 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %changelog
 * Mon May 17 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-9
 - Bootstrap build
+- Non-bootstrap build
 
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.3-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
