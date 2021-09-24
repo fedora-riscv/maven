@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -79,7 +79,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 %endif
 
 Requires: %{name}-lib = %{epoch}:%{version}-%{release}
-Requires: %{name}-jdk-binding
+Requires: %{name}-jdk-binding = %{epoch}:%{version}-%{release}
 Suggests: %{name}-openjdk11 = %{epoch}:%{version}-%{release}
 
 Requires(post): alternatives
@@ -126,6 +126,17 @@ Conflicts: maven-jdk-binding
 
 %description openjdk11
 Configures Maven to run with OpenJDK 11.
+
+%package openjdk17
+Summary:        OpenJDK 17 binding for Maven
+RemovePathPostfixes: -openjdk17
+Provides: maven-jdk-binding = %{epoch}:%{version}-%{release}
+Requires: maven = %{epoch}:%{version}-%{release}
+Requires: java-17-openjdk-devel
+Conflicts: maven-jdk-binding
+
+%description openjdk17
+Configures Maven to run with OpenJDK 17.
 
 %{?javadoc_package}
 
@@ -233,6 +244,7 @@ ln -s %{homedir}/bin/mvnDebug.1.gz %{buildroot}%{_mandir}/man1/mvnDebug%{maven_v
 install -d -m 755 %{buildroot}%{_javaconfdir}/
 echo JAVA_HOME=%{_jvmlibdir}/java-1.8.0-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk8
 echo JAVA_HOME=%{_jvmlibdir}/java-11-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk11
+echo JAVA_HOME=%{_jvmlibdir}/java-17-openjdk >%{buildroot}%{_javaconfdir}/maven.conf-openjdk17
 
 
 %post
@@ -275,7 +287,13 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %files openjdk11
 %config %{_javaconfdir}/maven.conf-openjdk11
 
+%files openjdk17
+%config %{_javaconfdir}/maven.conf-openjdk17
+
 %changelog
+* Fri Sep 24 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-12
+- Add OpenJDK 17 binding
+
 * Fri Sep 24 2021 Marian Koncek <mkoncek@redhat.com> - 1:3.6.3-11
 - Create a symlink to jansi shared object
 - Related: rhbz#1994935
