@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -202,6 +202,9 @@ cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
 xmvn-subst -s -R %{buildroot} -s %{buildroot}%{homedir}
 %endif
 
+# maven uses this hardcoded path in its launcher to locate jansi so we symlink it
+ln -s %{_prefix}/lib/jansi/libjansi.so %{buildroot}%{homedir}/lib/jansi-native/
+
 install -p -m 644 %{SOURCE2} %{buildroot}%{homedir}/bin/
 gzip -9 %{buildroot}%{homedir}/bin/mvn.1
 install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/mvn%{?maven_version_suffix}
@@ -273,6 +276,10 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk11
 
 %changelog
+* Fri Sep 24 2021 Marian Koncek <mkoncek@redhat.com> - 1:3.6.3-11
+- Create a symlink to jansi shared object
+- Related: rhbz#1994935
+
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.6.3-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
