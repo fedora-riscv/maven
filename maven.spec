@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -80,7 +80,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 
 Requires: %{name}-lib = %{epoch}:%{version}-%{release}
 Requires: %{name}-jdk-binding = %{epoch}:%{version}-%{release}
-Suggests: %{name}-openjdk11 = %{epoch}:%{version}-%{release}
+Suggests: %{name}-openjdk17 = %{epoch}:%{version}-%{release}
 
 Requires(post): alternatives
 Requires(postun): alternatives
@@ -291,6 +291,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Tue Nov 02 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-13
+- Suggest OpenJDK 17 as default Maven binding
+
 * Fri Sep 24 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-12
 - Add OpenJDK 17 binding
 
