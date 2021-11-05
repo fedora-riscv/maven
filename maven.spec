@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.6.3
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -291,6 +291,10 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Fri Nov 05 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-14
+- Do not override JAVA_HOME set by user
+- Resolves: rhbz#2020478
+
 * Tue Nov 02 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-13
 - Suggest OpenJDK 17 as default Maven binding
 
