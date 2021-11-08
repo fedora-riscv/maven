@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.8.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -81,7 +81,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 
 Requires: %{name}-lib = %{epoch}:%{version}-%{release}
 Requires: %{name}-jdk-binding = %{epoch}:%{version}-%{release}
-Suggests: %{name}-openjdk11 = %{epoch}:%{version}-%{release}
+Suggests: %{name}-openjdk17 = %{epoch}:%{version}-%{release}
 
 Requires(post): alternatives
 Requires(postun): alternatives
@@ -293,6 +293,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Thu Jan 27 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.4-3
+- Suggest OpenJDK 17 as default Maven binding
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.8.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
