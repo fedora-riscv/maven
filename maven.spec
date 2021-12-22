@@ -6,8 +6,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.6.3
-Release:        14%{?dist}
+Version:        3.8.4
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -25,6 +25,7 @@ Patch1:         0001-Adapt-mvn-script.patch
 Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
 Patch4:         0004-Remove-dependency-on-powermock.patch
+Patch5:         0005-Port-to-maven-resolver-1.7.2.patch
 
 BuildRequires:  maven-local-openjdk8
 %if %{with bootstrap}
@@ -150,6 +151,7 @@ find -name 'pom.xml' -exec sed -i 's/\r//' {} +
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -291,6 +293,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Fri Dec 17 2021 Marian Koncek <mkoncek@redhat.com> - 1:3.8.4-1
+- Update to upstream version 3.8.4
+
 * Fri Nov 05 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.6.3-14
 - Do not override JAVA_HOME set by user
 - Resolves: rhbz#2020478
