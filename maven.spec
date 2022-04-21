@@ -6,8 +6,8 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.8.4
-Release:        3%{?dist}
+Version:        3.8.5
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -26,6 +26,9 @@ Patch2:         0002-Invoke-logback-via-reflection.patch
 Patch3:         0003-Use-non-shaded-HTTP-wagon.patch
 Patch4:         0004-Remove-dependency-on-powermock.patch
 Patch5:         0005-Port-to-maven-resolver-1.7.2.patch
+# XMvn needs to be ported to Maven 3.8.5
+# For now restore backwards compatibility with Maven 3.8.4
+Patch6:         0006-Restore-DefaultModelValidator-compatibility-with-Mav.patch
 
 BuildRequires:  maven-local-openjdk8
 %if %{with bootstrap}
@@ -152,6 +155,7 @@ find -name 'pom.xml' -exec sed -i 's/\r//' {} +
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 # not really used during build, but a precaution
 find -name '*.jar' -not -path '*/test/*' -delete
@@ -191,6 +195,9 @@ sed -i "
 	<groupId>org.eclipse.sisu</groupId>
 	<artifactId>sisu-maven-plugin</artifactId>
 </plugin>' maven-model-builder/pom.xml
+
+# XXX extra-enforcer-rules are not packaged yet
+%pom_remove_dep :extra-enforcer-rules
 
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
@@ -293,6 +300,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Thu Apr 21 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.5-1
+- Update to upstream version 3.8.5
+
 * Thu Jan 27 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.4-3
 - Suggest OpenJDK 17 as default Maven binding
 

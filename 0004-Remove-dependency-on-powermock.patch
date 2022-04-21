@@ -1,17 +1,17 @@
-From f6eb583525c7f777bde16182c57a47345fd53cb0 Mon Sep 17 00:00:00 2001
+From d0bc26194a0e432206d7f92cf0b6fbef67946cc4 Mon Sep 17 00:00:00 2001
 From: Marian Koncek <mkoncek@redhat.com>
 Date: Thu, 5 Sep 2019 15:21:04 +0200
-Subject: [PATCH] Remove dependency on powermock
+Subject: [PATCH 4/6] Remove dependency on powermock
 
 ---
  .../StringSearchModelInterpolatorTest.java    | 66 -------------------
  1 file changed, 66 deletions(-)
 
 diff --git a/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java b/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
-index 45800d6..fbf3b23 100644
+index c95e37271..aafafa52f 100644
 --- a/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
 +++ b/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java
-@@ -36,8 +36,6 @@ import java.util.concurrent.FutureTask;
+@@ -36,8 +36,6 @@
  import static org.hamcrest.CoreMatchers.anyOf;
  import static org.hamcrest.CoreMatchers.is;
  import static org.junit.Assert.assertThat;
@@ -20,7 +20,7 @@ index 45800d6..fbf3b23 100644
  
  /**
   * @author jdcasey
-@@ -374,70 +372,6 @@ public class StringSearchModelInterpolatorTest
+@@ -375,70 +373,6 @@ public void testInterpolateObjectWithPomFile()
          ) ) );
      }
  
@@ -92,5 +92,5 @@ index 45800d6..fbf3b23 100644
          throws Exception
      {
 -- 
-2.24.1
+2.35.1
 
