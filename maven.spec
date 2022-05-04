@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.8.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -57,6 +57,7 @@ BuildRequires:  mvn(org.apache.maven.wagon:wagon-http)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
+BuildRequires:  mvn(org.codehaus.mojo:extra-enforcer-rules)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
@@ -196,9 +197,6 @@ sed -i "
 	<artifactId>sisu-maven-plugin</artifactId>
 </plugin>' maven-model-builder/pom.xml
 
-# XXX extra-enforcer-rules are not packaged yet
-%pom_remove_dep :extra-enforcer-rules
-
 %build
 %mvn_build -- -Dproject.build.sourceEncoding=UTF-8
 
@@ -300,6 +298,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Thu May 05 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.5-2
+- Add build-dependency on extra-enforcer-rules
+
 * Thu Apr 21 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.5-1
 - Update to upstream version 3.8.5
 
