@@ -10,5 +10,3 @@ discover:
     url: https://pagure.io/javapackages-validator-tests
 execute:
     how: tmt
-environment:
-    FMF_PACKAGE: maven
