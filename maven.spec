@@ -31,10 +31,10 @@ Patch5:         0005-Port-to-maven-resolver-1.7.2.patch
 # For now restore backwards compatibility with Maven 3.8.4
 Patch6:         0006-Restore-DefaultModelValidator-compatibility-with-Mav.patch
 
-BuildRequires:  maven-local-openjdk8
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
+BuildRequires:  javapackages-bootstrap-openjdk8
 %else
+BuildRequires:  maven-local-openjdk8
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
