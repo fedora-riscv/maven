@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.8.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -299,6 +299,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.8.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Thu May 05 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.5-2
 - Add build-dependency on extra-enforcer-rules
 
