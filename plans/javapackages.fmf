@@ -1,0 +1,29 @@
+discover:
+  how: fmf
+  url: https://pagure.io/javapackages-validator-tests
+prepare:
+  how: install
+  exclude:
+    - maven-openjdk8
+    - maven-openjdk11
+    - maven-openjdk17
+execute:
+  how: tmt
+
+/jdk8:
+  summary: Run javapackages-specific tests (OpenJDK 8)
+  prepare+:
+    exclude-:
+      - maven-openjdk8
+
+/jdk11:
+  summary: Run javapackages-specific tests (OpenJDK 11)
+  prepare+:
+    exclude-:
+      - maven-openjdk11
+
+/jdk17:
+  summary: Run javapackages-specific tests (OpenJDK 17)
+  prepare+:
+    exclude-:
+      - maven-openjdk17

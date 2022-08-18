@@ -1,8 +1,0 @@
-summary: Basic smoke test - OpenJDK 11
-prepare:
-  how: install
-  exclude:
-    - maven-openjdk8
-    - maven-openjdk17
-execute:
-  script: mvn -V dependency:get -Dartifact=junit:junit:4.12 && stat $HOME/.m2/repository/junit/junit/4.12/junit-4.12.jar
