@@ -1,9 +1,3 @@
-prepare:
-  how: install
-  exclude:
-    - maven-openjdk8
-    - maven-openjdk11
-    - maven-openjdk17
 discover:
   how: shell
   tests:
@@ -13,6 +7,12 @@ discover:
       test: mvn -v
     - name: /smoke/dependency-get
       test: rm -rf $HOME/.m2 && mvn -V dependency:get -Dartifact=junit:junit:4.12 && stat $HOME/.m2/repository/junit/junit/4.12/junit-4.12.jar
+prepare:
+  how: install
+  exclude:
+    - maven-openjdk8
+    - maven-openjdk11
+    - maven-openjdk17
 execute:
   how: tmt
 
