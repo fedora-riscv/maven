@@ -1,6 +1,7 @@
 discover:
   how: fmf
-  url: https://pagure.io/javapackages-validator-tests
+  url: https://src.fedoraproject.org/tests/javapackages
+  ref: f37
 prepare:
   how: install
   exclude:
