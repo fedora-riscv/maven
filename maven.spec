@@ -1,13 +1,13 @@
 %bcond_with bootstrap
 
-%global bundled_slf4j_version 1.7.30
+%global bundled_slf4j_version 1.7.36
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
 %global confdir %{_sysconfdir}/%{name}%{?maven_version_suffix}
 
 Name:           maven
 Epoch:          1
-Version:        3.8.5
-Release:        3%{?dist}
+Version:        3.8.6
+Release:        1%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -38,13 +38,14 @@ BuildRequires:  maven-local-openjdk8
 BuildRequires:  mvn(com.google.inject:guice::no_aop:)
 BuildRequires:  mvn(commons-cli:commons-cli)
 BuildRequires:  mvn(commons-jxpath:commons-jxpath)
-BuildRequires:  mvn(javax.annotation:jsr250-api)
+BuildRequires:  mvn(javax.annotation:javax.annotation-api)
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-enforcer-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-failsafe-plugin)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-api)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-connector-basic)
@@ -58,22 +59,22 @@ BuildRequires:  mvn(org.apache.maven.wagon:wagon-http)
 BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:extra-enforcer-rules)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-cipher)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-interpolation)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
+BuildRequires:  mvn(org.hamcrest:hamcrest-library)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-sec-dispatcher)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 %endif
@@ -299,6 +300,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Tue Sep 06 2022 Marian Koncek <mkoncek@redhat.com> - 1:3.8.6-1
+- Update to upstream version 3.8.6
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:3.8.5-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
