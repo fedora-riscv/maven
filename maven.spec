@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.8.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
@@ -222,6 +222,12 @@ cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
 xmvn-subst -s -R %{buildroot} -s %{buildroot}%{homedir}
 %endif
 
+# Workaround for xmvn-subst being unable to create symlink for MBI-built guice
+# XXX Remove once Guice is updated to version 5.
+%if %{with bootstrap}
+ln -sf %{_javadir}/google-guice-no_aop.jar %{buildroot}%{homedir}/lib/guice-4.*-no_aop.jar
+%endif
+
 # maven uses this hardcoded path in its launcher to locate jansi so we symlink it
 ln -s %{_prefix}/lib/jansi/libjansi.so %{buildroot}%{homedir}/lib/jansi-native/
 
@@ -300,6 +306,9 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %config %{_javaconfdir}/maven.conf-openjdk17
 
 %changelog
+* Tue Sep 13 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1:3.8.6-2
+- Add workaround for guava symlink creation with xmvn-subst
+
 * Tue Sep 06 2022 Marian Koncek <mkoncek@redhat.com> - 1:3.8.6-1
 - Update to upstream version 3.8.6
 
