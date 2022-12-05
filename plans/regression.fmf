@@ -1,0 +1,19 @@
+discover:
+  summary: Regression tests (default OpenJDK)
+  how: shell
+  tests:
+    - name: /regression/environment-java-home
+      environment:
+        JAVA_HOME: /tmp/java-home
+      test: |
+        mkdir -p "${JAVA_HOME}/bin"
+        echo -e '#!/bin/sh\nfalse' > "${JAVA_HOME}/bin/java"
+        chmod a+x "${JAVA_HOME}/bin/java"
+        ! mvn -v
+prepare:
+  how: install
+  exclude:
+    - maven-openjdk8
+    - maven-openjdk11
+execute:
+  how: tmt
