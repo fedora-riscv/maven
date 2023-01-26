@@ -1,41 +1,71 @@
 discover:
-  how: shell
-  tests:
-    - name: /smoke/ensure-single-jdk
-      test: "! rpm -qa | grep ^java- | grep -v ^java-${JDK_VERSION}-openjdk-"
-    - name: /smoke/show-version
-      test: mvn -v
-    - name: /smoke/dependency-get
-      test: rm -rf $HOME/.m2 && mvn -V dependency:get -Dartifact=junit:junit:4.12 && stat $HOME/.m2/repository/junit/junit/4.12/junit-4.12.jar
-prepare:
-  how: install
-  exclude:
-    - maven-openjdk8
-    - maven-openjdk11
-    - maven-openjdk17
+  how: fmf
+  url: https://github.com/mizdebsk/maven-tests
+
 execute:
   how: tmt
 
 /jdk8:
-  summary: Basic smoke tests (OpenJDK 8)
   environment:
-    JDK_VERSION: 1.8.0
-  prepare+:
-    exclude-:
-      - maven-openjdk8
+    OPENJDK_VERSION: 1.8.0
+  prepare:
+    - how: install
+      exclude:
+        - maven-openjdk11
+        - maven-openjdk17
+
+  /full:
+    summary: Basic smoke tests (OpenJDK 8 full)
+
+  /headless:
+    summary: Basic smoke tests (OpenJDK 8 headless)
+    discover+:
+      filter: tag:-java-compiler
+    environment+:
+      OPENJDK_HEADLESS: true
+    prepare+:
+      - how: shell
+        script: |
+          dnf -y erase java-*-openjdk
 
 /jdk11:
-  summary: Basic smoke tests (OpenJDK 11)
   environment:
-    JDK_VERSION: 11
-  prepare+:
-    exclude-:
-      - maven-openjdk11
+    OPENJDK_VERSION: 11
+  prepare:
+    - how: install
+      exclude:
+        - maven-openjdk8
+        - maven-openjdk17
+
+  /full:
+    summary: Basic smoke tests (OpenJDK 11 full)
+
+  /headless:
+    summary: Basic smoke tests (OpenJDK 11 headless)
+    environment+:
+      OPENJDK_HEADLESS: true
+    prepare+:
+      - how: shell
+        script: |
+          dnf -y erase java-*-openjdk
 
 /jdk17:
-  summary: Basic smoke tests (OpenJDK 17)
   environment:
-    JDK_VERSION: 17
-  prepare+:
-    exclude-:
-      - maven-openjdk17
+    OPENJDK_VERSION: 17
+  prepare:
+    - how: install
+      exclude:
+        - maven-openjdk8
+        - maven-openjdk11
+
+  /full:
+    summary: Basic smoke tests (OpenJDK 17 full)
+
+  /headless:
+    summary: Basic smoke tests (OpenJDK 17 headless)
+    environment+:
+      OPENJDK_HEADLESS: true
+    prepare+:
+      - how: shell
+        script: |
+          dnf -y erase java-*-openjdk
