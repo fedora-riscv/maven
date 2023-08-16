@@ -187,6 +187,8 @@ sed -i "
 
 %mvn_package :apache-maven __noinstall
 
+%pom_add_dep javax.annotation:javax.annotation-api::provided maven-core
+
 %pom_change_dep :jansi :::runtime maven-embedder
 %pom_remove_dep -r :logback-classic
 
