@@ -13,6 +13,7 @@ execute:
       exclude:
         - maven-openjdk11
         - maven-openjdk17
+        - maven-openjdk21
 
   /full:
     summary: Basic smoke tests (OpenJDK 8 full)
@@ -36,6 +37,7 @@ execute:
       exclude:
         - maven-openjdk8
         - maven-openjdk17
+        - maven-openjdk21
 
   /full:
     summary: Basic smoke tests (OpenJDK 11 full)
@@ -57,6 +59,7 @@ execute:
       exclude:
         - maven-openjdk8
         - maven-openjdk11
+        - maven-openjdk21
 
   /full:
     summary: Basic smoke tests (OpenJDK 17 full)
@@ -69,3 +72,26 @@ execute:
       - how: shell
         script: |
           dnf -y erase java-*-openjdk
+
+/jdk21:
+  environment:
+    OPENJDK_VERSION: 21
+  prepare:
+    - how: install
+      exclude:
+        - maven-openjdk8
+        - maven-openjdk11
+        - maven-openjdk17
+
+  /full:
+    summary: Basic smoke tests (OpenJDK 21 full)
+
+  /headless:
+    summary: Basic smoke tests (OpenJDK 21 headless)
+    environment+:
+      OPENJDK_HEADLESS: true
+    prepare+:
+      - how: shell
+        script: |
+          dnf -y erase java-*-openjdk
+

@@ -1,13 +1,14 @@
 discover:
   how: fmf
   url: https://src.fedoraproject.org/tests/javapackages
-  ref: f37
+  ref: f39
 prepare:
   how: install
   exclude:
     - maven-openjdk8
     - maven-openjdk11
     - maven-openjdk17
+    - maven-openjdk21
 execute:
   how: tmt
 
@@ -28,3 +29,10 @@ execute:
   prepare+:
     exclude-:
       - maven-openjdk17
+
+/jdk21:
+  summary: Run javapackages-specific tests (OpenJDK 21)
+  prepare+:
+    exclude-:
+      - maven-openjdk21
+

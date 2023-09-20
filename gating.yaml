@@ -8,9 +8,12 @@ rules:
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk8/full.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk11/full.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk17/full.functional}
+  - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk21/full.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk8/headless.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk11/headless.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk17/headless.functional}
+  - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/smoke/jdk21/headless.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/javapackages/jdk8.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/javapackages/jdk11.functional}
   - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/javapackages/jdk17.functional}
+  - !PassingTestCaseRule {test_case_name: fedora-ci.koji-build./plans/javapackages/jdk21.functional}
