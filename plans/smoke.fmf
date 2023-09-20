@@ -75,7 +75,9 @@ execute:
 
 /jdk21:
   environment:
-    OPENJDK_VERSION: 21
+    # For now OpenJDK 21 RPM packages are still called "java-latest-openjdk"
+    OPENJDK_VERSION: latest
+    #OPENJDK_VERSION: 21
   prepare:
     - how: install
       exclude:
