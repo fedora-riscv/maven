@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %global bundled_slf4j_version 1.7.36
 %global homedir %{_datadir}/%{name}%{?maven_version_suffix}
@@ -7,7 +7,7 @@
 Name:           maven
 Epoch:          1
 Version:        3.9.1
-Release:        3%{?dist}
+Release:        3.rv64~bootstrap%{?dist}
 Summary:        Java project management and project comprehension tool
 # maven itself is ASL 2.0
 # bundled slf4j is MIT
